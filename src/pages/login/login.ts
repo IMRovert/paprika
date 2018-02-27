@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {RegisterPage} from "../register/register";
+import {HomePage} from "../home/home";
 
 /**
  * Generated class for the LoginPage page.
@@ -12,7 +13,6 @@ import {RegisterPage} from "../register/register";
 @IonicPage()
 @Component({
   selector: 'page-login',
-  styles: ['login.scss'],
   templateUrl: 'login.html',
 })
 export class LoginPage {
@@ -31,6 +31,11 @@ export class LoginPage {
   }
 
   login() {
-    // TODO: Login code
+    console.log("teset");
+    // TODO: Real Login code to check credentials
+
+    // Navigate to home page as new root
+    this.navCtrl.setRoot(HomePage);
+    // this.navCtrl.push(HomePage);
   }
 }

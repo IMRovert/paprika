@@ -8,6 +8,7 @@ import {MyApp} from './app.component';
 import {HomePage} from '../pages/home/home';
 import {LoginPage} from "../pages/login/login";
 import {LoginPageModule} from "../pages/login/login.module";
+import {RegisterPageModule} from "../pages/register/register.module";
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import {LoginPageModule} from "../pages/login/login.module";
   imports: [
     BrowserModule,
     LoginPageModule,
+    RegisterPageModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
