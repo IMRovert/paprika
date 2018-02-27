@@ -9,16 +9,19 @@ import {HomePage} from '../pages/home/home';
 import {LoginPage} from "../pages/login/login";
 import {LoginPageModule} from "../pages/login/login.module";
 import {RegisterPageModule} from "../pages/register/register.module";
+import {HomePageModule} from "../pages/home/home.module";
+import {ProfilePageModule} from "../pages/profile/profile.module";
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
   ],
   imports: [
     BrowserModule,
     LoginPageModule,
     RegisterPageModule,
+    HomePageModule,
+    ProfilePageModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],

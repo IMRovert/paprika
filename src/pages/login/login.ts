@@ -1,6 +1,5 @@
-import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import {HomePage} from "../home/home";
+import {Component, OnInit} from '@angular/core';
+import {IonicPage, MenuController, NavController, NavParams} from 'ionic-angular';
 
 /**
  * Generated class for the LoginPage page.
@@ -14,9 +13,12 @@ import {HomePage} from "../home/home";
   selector: 'page-login',
   templateUrl: 'login.html',
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menu: MenuController) {
+  }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  ngOnInit(): void {
+    this.menu.enable(false);
   }
 
   //TODO: Use FormBuilder for the form
@@ -34,7 +36,7 @@ export class LoginPage {
     // TODO: Real Login code to check credentials
 
     // Navigate to home page as new root
-    this.navCtrl.setRoot(HomePage);
-    // this.navCtrl.push(HomePage);
+    this.navCtrl.setRoot('HomePage');
+    this.menu.enable(true);
   }
 }
