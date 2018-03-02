@@ -12,6 +12,7 @@ export class MyApp implements OnInit {
   rootPage: any = LoginPage;
   profilePage = 'ProfilePage';
   graphs = 'GraphsPage';
+  importPage = 'ImportPage';
   addTransactionPage = 'AddTransactionPage';
   homePage = HomePage;
 
