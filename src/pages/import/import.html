@@ -17,5 +17,20 @@
   <div id="import-markdown11" class="show-list-numbers-and-dots">
     <p>Will contain information needed to find the data that the user would like to import.</p>
   </div>
-  <button ion-button large block>Import Data</button>
+  <form id="importform" (submit)="readFile()">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Name of this Account</ion-label>
+        <ion-input type="text" name="accountname"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Select a file</ion-label>
+        <ion-input id="inputfile" type="file" name="inputfile"></ion-input>
+      </ion-item>
+      <ion-item>
+        <button type="submit" color="dark" ion-button block large>Import File</button>
+      </ion-item>
+    </ion-list>
+  </form>
+  <!--<button ion-button large block>Import Data</button> -->
 </ion-content>
