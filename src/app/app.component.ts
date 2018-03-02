@@ -15,6 +15,7 @@ export class MyApp implements OnInit {
   importPage = 'ImportPage';
   addTransactionPage = 'AddTransactionPage';
   homePage = HomePage;
+  exportPage = 'ExportPage';
 
   @ViewChild('content') nav: NavController;
 
