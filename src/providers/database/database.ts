@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {User} from "../../models/user";
 
 /*
   Generated class for the SQLiteDatabaseProvider provider.
@@ -6,30 +7,58 @@ import {Injectable} from '@angular/core';
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
-export declare class DatabaseProvider{
-  decryptData():Promise<any>;
-  encryptData():Promise<any>;
-  verifyCredentials(id: number, password: string):Promise<boolean>;
-  createUser(info: object):Promise<any>;
-  resetPassword(info: object):Promise<any>;
-  getUser():Promise<any>;
-  getAccounts(user: object):Promise<any>;
-  addAccount(user: object, account: object):Promise<any>;
-  addTransaction(transaction: object):Promise<any>;
-  addBill(bill: object):Promise<any>;
-  updateTransaction():Promise<any>;
-  updateBill():Promise<any>;
-  payBill():Promise<any>;
-  getTransactionHistory():Promise<any>;
-  getBills():Promise<any>;
-  getBalance(account: object):Promise<any>;
-  exportData():Promise<any>;
-  importData():Promise<any>;
+export declare class DatabaseProvider {
+  decryptData(): Promise<any>;
+
+  encryptData(): Promise<any>;
+
+  verifyCredentials(id: number, password: string): Promise<boolean>;
+
+  createUser(user: User): Promise<User>;
+
+  resetPassword(info: object): Promise<any>;
+
+  getUser(): Promise<User>;
+
+  getAccounts(user: object): Promise<any>;
+
+  addAccount(user: object, account: object): Promise<any>;
+
+  addTransaction(transaction: object): Promise<any>;
+
+  addBill(bill: object): Promise<any>;
+
+  updateTransaction(): Promise<any>;
+
+  updateBill(): Promise<any>;
+
+  payBill(): Promise<any>;
+
+  getTransactionHistory(): Promise<any>;
+
+  getBills(): Promise<any>;
+
+  getBalance(account: object): Promise<any>;
+
+  exportData(): Promise<any>;
+
+  importData(): Promise<any>;
 }
 
 
 @Injectable()
-export class SQLiteDatabaseProvider implements DatabaseProvider{
+export class SQLiteDatabaseProvider implements DatabaseProvider {
+  createUser(user: User): Promise<User> {
+    return undefined;
+  }
+
+  getUser(): Promise<User> {
+    return undefined;
+  }
+  resetPassword(info: object): Promise<any> {
+    return undefined;
+  }
+
   decryptData(): Promise<any> {
     return undefined;
   }
@@ -39,14 +68,6 @@ export class SQLiteDatabaseProvider implements DatabaseProvider{
   }
 
   verifyCredentials(id: number, password: string): Promise<boolean> {
-    return undefined;
-  }
-
-  createUser(info: object): Promise<any> {
-    return undefined;
-  }
-
-  getUser(): Promise<any> {
     return undefined;
   }
 
