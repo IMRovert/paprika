@@ -11,6 +11,7 @@ import {LoginPageModule} from "../pages/login/login.module";
 import {RegisterPageModule} from "../pages/register/register.module";
 import {HomePageModule} from "../pages/home/home.module";
 import {ProfilePageModule} from "../pages/profile/profile.module";
+import {AddTransactionPageModule} from "../pages/add-transaction/add-transaction.module";
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import {ProfilePageModule} from "../pages/profile/profile.module";
     RegisterPageModule,
     HomePageModule,
     ProfilePageModule,
+    AddTransactionPageModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
