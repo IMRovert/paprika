@@ -12,8 +12,9 @@ export class MyApp implements OnInit {
   rootPage: any = LoginPage;
   profilePage = 'ProfilePage';
   graphs = 'GraphsPage';
-
+  addTransactionPage = 'AddTransactionPage';
   homePage = HomePage;
+
   @ViewChild('content') nav: NavController;
 
   @ViewChild('mainMenu') mainMenu: MenuController;
@@ -32,8 +33,14 @@ export class MyApp implements OnInit {
   }
 
   openPage(page: any) {
-    this.nav.push(page);
-    this.mainMenu.close();
+
+    if (page === this.homePage) {
+      this.nav.popToRoot();
+      this.mainMenu.close();
+    } else {
+      this.nav.push(page);
+      this.mainMenu.close();
+    }
   }
 
   logout() {
