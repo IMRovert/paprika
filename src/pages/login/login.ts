@@ -30,9 +30,6 @@ export class LoginPage implements OnInit {
   goToRegister() {
     this.navCtrl.push('RegisterPage');
   }
-  goToImport() {
-    this.navCtrl.push('ImportPage');
-  }
 
   login() {
     console.log("teset");
