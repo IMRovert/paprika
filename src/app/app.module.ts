@@ -12,6 +12,9 @@ import {RegisterPageModule} from "../pages/register/register.module";
 import {HomePageModule} from "../pages/home/home.module";
 import {ProfilePageModule} from "../pages/profile/profile.module";
 import {AddTransactionPageModule} from "../pages/add-transaction/add-transaction.module";
+import {DatabaseProvider, SQLiteDatabaseProvider} from '../providers/database/database';
+import {inMemoryFileCopySuffix} from "@ionic/app-scripts/dist/transpile";
+import {InMemoryDatabaseProvider} from "../providers/database/inMemoryDatabase";
 
 @NgModule({
   declarations: [
@@ -35,7 +38,9 @@ import {AddTransactionPageModule} from "../pages/add-transaction/add-transaction
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    {provide: DatabaseProvider, useClass: InMemoryDatabaseProvider},
+    SQLiteDatabaseProvider
   ]
 })
 export class AppModule {
