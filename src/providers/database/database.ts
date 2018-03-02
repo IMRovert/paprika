@@ -11,6 +11,7 @@ export declare class DatabaseProvider{
   encryptData():Promise<any>;
   verifyCredentials(id: number, password: string):Promise<boolean>;
   createUser(info: object):Promise<any>;
+  resetPassword(info: object):Promise<any>;
   getUser():Promise<any>;
   getAccounts(user: object):Promise<any>;
   addAccount(user: object, account: object):Promise<any>;
@@ -24,7 +25,6 @@ export declare class DatabaseProvider{
   getBalance(account: object):Promise<any>;
   exportData():Promise<any>;
   importData():Promise<any>;
-
 }
 
 
