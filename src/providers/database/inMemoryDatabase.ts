@@ -1,11 +1,10 @@
 import {Injectable} from "@angular/core";
 import {DatabaseProvider} from "./database";
-import {UrlSerializer} from "ionic-angular";
 import {User} from "../../models/user";
 import {Account} from "../../models/account";
 
 @Injectable()
-export class InMemoryDatabaseProvider implements DatabaseProvider {
+export class InMemoryDatabaseProvider extends DatabaseProvider {
   createUser(user: User): Promise<User> {
     return new Promise<User>(resolve => {
       this.user = user;
@@ -17,6 +16,7 @@ export class InMemoryDatabaseProvider implements DatabaseProvider {
   private account: Account;
 
   constructor() {
+    super();
     console.log('Hello InMemoryDatabaseProvider Provider');
     this.user = new User("Mr. Bla", "password", "matt@mr.bla");
     this.account = new Account(1, "Grand Spoons","IBM","sav",69.69,"CAD");

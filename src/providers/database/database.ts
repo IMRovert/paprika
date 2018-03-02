@@ -7,47 +7,48 @@ import {User} from "../../models/user";
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
-export declare class DatabaseProvider {
-  decryptData(): Promise<any>;
+export abstract class DatabaseProvider {
 
-  encryptData(): Promise<any>;
+  abstract decryptData(): Promise<any>;
 
-  verifyCredentials(id: number, password: string): Promise<boolean>;
+  abstract encryptData(): Promise<any>;
 
-  createUser(user: User): Promise<User>;
+  abstract verifyCredentials(id: number, password: string): Promise<boolean>;
 
-  resetPassword(info: object): Promise<any>;
+  abstract createUser(user: User): Promise<User>;
 
-  getUser(): Promise<User>;
+  abstract resetPassword(info: object): Promise<any>;
 
-  getAccounts(user: object): Promise<any>;
+  abstract getUser(): Promise<User>;
 
-  addAccount(user: object, account: object): Promise<any>;
+  abstract getAccounts(user: object): Promise<any>;
 
-  addTransaction(transaction: object): Promise<any>;
+  abstract addAccount(user: object, account: object): Promise<any>;
 
-  addBill(bill: object): Promise<any>;
+  abstract addTransaction(transaction: object): Promise<any>;
 
-  updateTransaction(): Promise<any>;
+  abstract addBill(bill: object): Promise<any>;
 
-  updateBill(): Promise<any>;
+  abstract updateTransaction(): Promise<any>;
 
-  payBill(): Promise<any>;
+  abstract updateBill(): Promise<any>;
 
-  getTransactionHistory(): Promise<any>;
+  abstract payBill(): Promise<any>;
 
-  getBills(): Promise<any>;
+  abstract getTransactionHistory(): Promise<any>;
 
-  getBalance(account: object): Promise<any>;
+  abstract getBills(): Promise<any>;
 
-  exportData(): Promise<any>;
+  abstract getBalance(account: object): Promise<any>;
 
-  importData(): Promise<any>;
+  abstract exportData(): Promise<any>;
+
+  abstract importData(): Promise<any>;
 }
 
 
 @Injectable()
-export class SQLiteDatabaseProvider implements DatabaseProvider {
+export class SQLiteDatabaseProvider extends DatabaseProvider {
   createUser(user: User): Promise<User> {
     return undefined;
   }
@@ -55,6 +56,7 @@ export class SQLiteDatabaseProvider implements DatabaseProvider {
   getUser(): Promise<User> {
     return undefined;
   }
+
   resetPassword(info: object): Promise<any> {
     return undefined;
   }
@@ -120,6 +122,7 @@ export class SQLiteDatabaseProvider implements DatabaseProvider {
   }
 
   constructor() {
+    super();
     console.log('Hello SQLiteDatabaseProvider Provider');
   }
 
