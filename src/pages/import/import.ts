@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
 import { File } from '@ionic-native/file';
 
 /**
@@ -16,7 +16,7 @@ import { File } from '@ionic-native/file';
 })
 export class ImportPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private file: File ) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, public plat : Platform ) {
 
    /* checkFile(path, file);
     createFile(path, file, false);
@@ -53,6 +53,13 @@ export class ImportPage {
     //  console.log(value);
     //}).catch();
 
+    if(this.plat.is('android')) {
+      /* Use a fileChooser.open to get file, and assigne to file variable */
+    }
+    else if(this.plat.is('browser')) {
+      /* Get file from HTML form */
+
+    }
     let fileText = "Date,Amount,Payee,Desc\n09-12-24,550.0,Trevor,Making Bank Yo";
     let lines = fileText.split("\n");
     let items = [""];
@@ -64,6 +71,7 @@ export class ImportPage {
       console.log(lines[i]);
       items = lines[i].split(",");
       for(var j = 0; j < items.length;j++) {
+        console.log(headers[j]);
         console.log(items[j]);
       };
 
