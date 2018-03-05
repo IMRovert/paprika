@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {IonicPage, MenuController, NavController, NavParams} from 'ionic-angular';
+import {DatabaseProvider} from "../../providers/database/database";
 
 /**
  * Generated class for the LoginPage page.
@@ -14,7 +15,7 @@ import {IonicPage, MenuController, NavController, NavParams} from 'ionic-angular
   templateUrl: 'login.html',
 })
 export class LoginPage implements OnInit {
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menu: MenuController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public menu: MenuController, private db: DatabaseProvider) {
   }
 
   ngOnInit(): void {
