@@ -62,9 +62,12 @@ export class ImportPage {
 
     }
 
-    this.http.get('test.txt', {}, {}).then((data) => {
+    let testdata;
+    this.http.get('ImportFiles/test.txt', {}, {}).then((data) => {
       console.log(data);
-    }).catch((err) => {console.log("File read error: " + err)});
+      testdata = data.data;
+      console.log(testdata)
+    }).catch((err) => {console.log("File read error: " + err.toString())});
 
 
 
