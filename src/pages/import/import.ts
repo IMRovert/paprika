@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
 import { File } from '@ionic-native/file';
+import { HTTP } from '@ionic-native/http';
 
 /**
  * Generated class for the ImportPage page.
@@ -16,7 +17,7 @@ import { File } from '@ionic-native/file';
 })
 export class ImportPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, public plat : Platform ) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, public plat : Platform, private http : HTTP) {
 
    /* checkFile(path, file);
     createFile(path, file, false);
@@ -60,19 +61,25 @@ export class ImportPage {
       /* Get file from HTML form */
 
     }
-    let fileText = "Date,Amount,Payee,Desc\n09-12-24,550.0,Trevor,Making Bank Yo";
+
+    this.http.get('test.txt', {}, {}).then((data) => {
+      console.log(data);
+    }).catch((err) => {console.log("File read error: " + err)});
+
+
+
+    let fileText = "Date,Amount,Payee,Desc\n09-12-24,550.0,Trevor,Making Bank Yo\n09-07-06,200.55,Russell,#Dolla";
     let lines = fileText.split("\n");
     let items = [""];
     let headers = lines[0].split(",");
-    for(var k = 0;k < headers.length;k++) {
+    /*for(var k = 0;k < headers.length;k++) {
       console.log(headers[k]);
-    }
+    }*/
     for(var i = 1; i < lines.length;i++) {
       console.log(lines[i]);
       items = lines[i].split(",");
       for(var j = 0; j < items.length;j++) {
-        console.log(headers[j]);
-        console.log(items[j]);
+        console.log(headers[j] + ": " + items[j]);
       };
 
 

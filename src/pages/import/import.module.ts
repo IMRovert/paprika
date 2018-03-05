@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { ImportPage } from './import';
 import { File } from '@ionic-native/file';
+import { HTTP } from '@ionic-native/http';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,7 @@ import { File } from '@ionic-native/file';
     IonicPageModule.forChild(ImportPage),
   ],
    providers: [
-    File
+    File, HTTP
   ]
 })
 export class ImportPageModule {}
