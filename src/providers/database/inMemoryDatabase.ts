@@ -5,12 +5,6 @@ import {Account} from "../../models/account";
 
 @Injectable()
 export class InMemoryDatabaseProvider extends DatabaseProvider {
-  createUser(user: User): Promise<User> {
-    return new Promise<User>(resolve => {
-      this.user = user;
-      resolve.apply(this.user);
-    });
-  }
 
   private user: User;
   private account: Account;
@@ -19,7 +13,7 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     super();
     console.log('Hello InMemoryDatabaseProvider Provider');
     this.user = new User("Mr. Bla", "password", "matt@mr.bla");
-    this.account = new Account(1, "Grand Spoons","IBM","sav",69.69,"CAD");
+    this.account = new Account(1, "Grand Spoons", "IBM", "sav", 69.69, "CAD");
   }
 
   resetPassword(info: object): Promise<any> {
@@ -36,6 +30,13 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
 
   verifyCredentials(id: number, password: string): Promise<boolean> {
     return undefined;
+  }
+
+  createUser(user: User): Promise<User> {
+    return new Promise<User>(resolve => {
+      this.user = user;
+      resolve.apply(this.user);
+    });
   }
 
   getUser(): Promise<User> {
