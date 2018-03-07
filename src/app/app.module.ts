@@ -5,16 +5,16 @@ import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
 
 import {MyApp} from './app.component';
-import {HomePage} from '../pages/home/home';
 import {LoginPage} from "../pages/login/login";
 import {LoginPageModule} from "../pages/login/login.module";
 import {RegisterPageModule} from "../pages/register/register.module";
-import {HomePageModule} from "../pages/home/home.module";
 import {ProfilePageModule} from "../pages/profile/profile.module";
 import {AddTransactionPageModule} from "../pages/add-transaction/add-transaction.module";
 import {DatabaseProvider} from '../providers/database/database';
 import {InMemoryDatabaseProvider} from "../providers/database/inMemoryDatabase";
 import {CalendarModule} from "ion2-calendar";
+import {TransactionHistoryPageModule} from "../pages/transaction-history/transaction-history.module";
+import {TransactionHistoryPage} from "../pages/transaction-history/transaction-history";
 
 @NgModule({
   declarations: [
@@ -24,7 +24,7 @@ import {CalendarModule} from "ion2-calendar";
     BrowserModule,
     LoginPageModule,
     RegisterPageModule,
-    HomePageModule,
+    TransactionHistoryPageModule,
     ProfilePageModule,
     CalendarModule,
     AddTransactionPageModule,
@@ -34,7 +34,7 @@ import {CalendarModule} from "ion2-calendar";
   entryComponents: [
     LoginPage,
     MyApp,
-    HomePage,
+    TransactionHistoryPage,
   ],
   providers: [
     StatusBar,

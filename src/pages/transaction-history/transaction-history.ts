@@ -1,17 +1,18 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
-import { NavController, NavParams } from 'ionic-angular';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
 
 import {Transaction} from "../../models/transaction";
 
+@IonicPage()
 @Component({
-  selector: 'page-list',
-  templateUrl: 'list.html'
+  selector: 'page-transaction-history',
+  templateUrl: 'transaction-history.html'
 })
-export class ListPage {
+export class TransactionHistoryPage {
   icons: string[];
   transList: Transaction[];
-  items: Array<{title: string, note: string, icon: string}>;
+  items: Array<{ title: string, note: string, icon: string }>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.icons = ['log-in', 'log-out'];
@@ -24,11 +25,11 @@ export class ListPage {
     ];
 
     this.items = [];
-    for(let i = 0; i < this.transList.length; i++) {
+    for (let i = 0; i < this.transList.length; i++) {
       this.items.push({
-        title: this.transList[i].amount.toString() + ((this.transList[i].type == 'deposit')? " +":" -"),
+        title: this.transList[i].amount.toString() + ((this.transList[i].type == 'deposit') ? " +" : " -"),
         note: this.transList[i].description,
-        icon: ((this.transList[i].type == 'deposit')? this.icons[0]:this.icons[1])
+        icon: ((this.transList[i].type == 'deposit') ? this.icons[0] : this.icons[1])
       });
     }
   }
@@ -38,4 +39,7 @@ export class ListPage {
   //     item: item
   //   });
   // }
+  itemTapped($event, item: Transaction) {
+
+  }
 }
