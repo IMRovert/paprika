@@ -1,6 +1,7 @@
-import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { GraphsPage } from './graphs';
+import {NgModule} from '@angular/core';
+import {IonicPageModule} from 'ionic-angular';
+import {GraphsPage} from './graphs';
+import {CalendarModule} from "ion2-calendar";
 
 @NgModule({
   declarations: [
@@ -8,6 +9,8 @@ import { GraphsPage } from './graphs';
   ],
   imports: [
     IonicPageModule.forChild(GraphsPage),
+    CalendarModule,
   ],
 })
-export class GraphsPageModule {}
+export class GraphsPageModule {
+}
