@@ -2,8 +2,7 @@ import {Injectable} from "@angular/core";
 import {DatabaseProvider} from "./database";
 import {User} from "../../models/user";
 import {Account} from "../../models/account";
-import {transaction} from "../../models/transaction";
-import {List} from "ionic-angular";
+import {Transaction} from "../../models/transaction";
 
 @Injectable()
 export class InMemoryDatabaseProvider extends DatabaseProvider {
@@ -23,6 +22,7 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     console.log('Hello InMemoryDatabaseProvider Provider');
     this.user = new User("Mr. Bla", "password", "matt@mr.bla");
     this.account = new Account(1, "Grand Spoons", "IBM", "sav", 69.69, "CAD");
+    this.accounts = [];
     this.accounts.push(this.account);
   }
 
@@ -69,7 +69,7 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
-  updateTransaction(id: number): Promise<transaction> {
+  updateTransaction(id: number): Promise<Transaction> {
 
     return undefined;
   }

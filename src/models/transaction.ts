@@ -1,7 +1,7 @@
 import {Category} from "./category";
 
 
-export class transaction {
+export class Transaction {
   private _amount: number;
   private _currency: string;
   private _date: number;
