@@ -8,6 +8,9 @@
 </ion-header>
 
 <ion-content>
+  <ion-fab right bottom>
+    <button ion-fab (click)="addTransaction()"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
   <ion-list *ngIf="transList.length > 0">
     <button ion-item *ngFor="let trans of transList" (click)="itemTapped($event, trans)">
       <ion-icon [name]="trans.type === 'deposit' ? 'log-in' : 'log-out'" item-left></ion-icon>

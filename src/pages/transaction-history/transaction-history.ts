@@ -23,14 +23,13 @@ export class TransactionHistoryPage {
     });
   }
 
-  // itemTapped(event, item) {
-  //   this.navCtrl.push(ItemDetailsPage, {
-  //     item: item
-  //   });
-  // }
   itemTapped($event, item: Transaction) {
     this.navCtrl.push('EditTransactionPage', {
       transaction: item
     });
+  }
+
+  addTransaction() {
+    this.navCtrl.push('EditTransactionPage');
   }
 }
