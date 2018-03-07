@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {IonicPage, MenuController, NavController, NavParams} from 'ionic-angular';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {DatabaseProvider} from "../../providers/database/database";
 
 /**
  * Generated class for the LoginPage page.
