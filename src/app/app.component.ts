@@ -3,7 +3,7 @@ import {MenuController, NavController, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {LoginPage} from "../pages/login/login";
-import {HomePage} from "../pages/home/home";
+import {TransactionHistoryPage} from "../pages/transaction-history/transaction-history";
 
 @Component({
   templateUrl: 'app.html'
@@ -14,7 +14,7 @@ export class MyApp implements OnInit {
   graphs = 'GraphsPage';
   importPage = 'ImportPage';
   addTransactionPage = 'AddTransactionPage';
-  homePage = HomePage;
+  homePage = TransactionHistoryPage;
   exportPage = 'ExportPage';
 
   @ViewChild('content') nav: NavController;

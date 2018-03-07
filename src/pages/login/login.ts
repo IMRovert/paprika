@@ -37,7 +37,7 @@ export class LoginPage implements OnInit {
     // TODO: Real Login code to check credentials
 
     // Navigate to home page as new root
-    this.navCtrl.setRoot('HomePage');
+    this.navCtrl.setRoot('TransactionHistoryPage');
     this.menu.enable(true);
   }
 }
