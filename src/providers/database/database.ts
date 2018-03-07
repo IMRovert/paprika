@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {User} from "../../models/user";
+import {Transaction} from "../../models/transaction";
 import {Category} from "../../models/category";
 
 /*
@@ -14,15 +15,15 @@ export abstract class DatabaseProvider {
 
   abstract encryptData(): Promise<any>;
 
-  abstract verifyCredentials(id: number, password: string): Promise<boolean>;
+  abstract verifyCredentials(name: string, password: string): Promise<boolean>;
 
   abstract createUser(user: User): Promise<User>;
 
-  abstract resetPassword(info: object): Promise<any>;
+  abstract resetPassword(password: string): Promise<any>;
 
   abstract getUser(): Promise<User>;
 
-  abstract getAccounts(user: object): Promise<any>;
+  abstract getAccounts(): Promise<any>;
 
   abstract addAccount(user: object, account: object): Promise<any>;
 
@@ -30,7 +31,7 @@ export abstract class DatabaseProvider {
 
   abstract addBill(bill: object): Promise<any>;
 
-  abstract updateTransaction(): Promise<any>;
+  abstract updateTransaction(id: number): Promise<Transaction>;
 
   abstract updateBill(): Promise<any>;
 
@@ -70,7 +71,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
-  resetPassword(info: object): Promise<any> {
+  resetPassword(password: string): Promise<any> {
     return undefined;
   }
 
@@ -82,11 +83,11 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
-  verifyCredentials(id: number, password: string): Promise<boolean> {
+  verifyCredentials(name: string, password: string): Promise<boolean> {
     return undefined;
   }
 
-  getAccounts(user: object): Promise<any> {
+  getAccounts(): Promise<any> {
     return undefined;
   }
 
@@ -102,7 +103,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
-  updateTransaction(): Promise<any> {
+  updateTransaction(id: number): Promise<Transaction> {
     return undefined;
   }
 
