@@ -14,7 +14,7 @@
 
 
 <ion-content padding>
-  <button ion-button [outline]="true" (click)="openCalendar()">Range</button>
+  <button ion-button (click)="openCalendar()">{{dateRange.from}} - {{dateRange.to}}</button>
 
   <ion-card>
     <ion-card-header>
