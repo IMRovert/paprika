@@ -47,7 +47,7 @@ export class LoginPage implements OnInit {
     this.db.getUser().then(value => {
       console.log(value);
       if (this.login.controls["email"].value == value.email && this.login.controls["password"].value == value.password) {
-        this.navCtrl.setRoot('HomePage');
+        this.navCtrl.setRoot('TransactionHistoryPage');
         this.menu.enable(true);
       }else{
 
