@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {DatabaseProvider} from "../../providers/database/database";
 import {Category} from "../../models/category";
+import {Transaction} from "../../models/transaction";
 
 /**
  * Generated class for the EditTransactionPage page.
@@ -18,8 +19,22 @@ import {Category} from "../../models/category";
 export class EditTransactionPage {
 
   categories: Category[];
+  transaction: Transaction;
+  title = "Add Transaction";
+  edit = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private db: DatabaseProvider, private alertCtrl: AlertController) {
+    let transaction = navParams.get("transaction");
+
+    if (transaction) {
+      this.transaction = transaction;
+      this.title = "Edit Transaction";
+      this.edit = true;
+    } else {
+      this.title = "Add Transaction";
+      this.transaction = new Transaction(0, 0, "CDN", new Date().getDate(), "", 0, "", 0, "withdrawal");
+    }
+
   }
 
   ionViewDidLoad() {
@@ -63,5 +78,22 @@ export class EditTransactionPage {
       ]
     });
     alert.present();
+  }
+
+
+  save() {
+    if (this.edit) {
+      this.db.updateTransaction(this.transaction.id, this.transaction).then(value => {
+        if (value) {
+          this.navCtrl.pop();
+        }
+      })
+    } else {
+      this.db.addTransaction(this.transaction).then(value => {
+        if (value) {
+          this.navCtrl.pop();
+        }
+      })
+    }
   }
 }

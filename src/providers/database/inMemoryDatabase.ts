@@ -90,6 +90,7 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
 
   addTransaction(transaction: Transaction): Promise<boolean> {
     return new Promise<boolean>(resolve => {
+      transaction.id = this.transactions.length;
       this.transactions.push(transaction);
       resolve(true);
     });

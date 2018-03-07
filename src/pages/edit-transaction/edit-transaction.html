@@ -12,49 +12,47 @@
 </ion-header>
 
 <ion-content padding>
-  <form>
-    <ion-label>Account</ion-label>
-    <ion-list radio-group>
-      <ion-item>
-        <ion-label>Chequing</ion-label>
-        <ion-radio value="Chequing"></ion-radio>
-      </ion-item>
-      <ion-item>
-        <ion-label>Savings</ion-label>
-        <ion-radio value="Savings"></ion-radio>
-      </ion-item>
-    </ion-list>
-    <ion-label>Transaction Type</ion-label>
-    <ion-list radio-group>
-      <ion-item>
-        <ion-label>Deposit</ion-label>
-        <ion-radio value="deposit"></ion-radio>
-      </ion-item>
-      <ion-item>
-        <ion-label>Withdrawal</ion-label>
-        <ion-radio value="withdrawal"></ion-radio>
-      </ion-item>
-      <ion-item>
-        <ion-input type="number" placeholder="Amount"></ion-input>
-      </ion-item>
-    </ion-list>
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-            <ion-label>Category</ion-label>
-            <ion-select>
-              <ion-option *ngFor="let cat of categories" [value]="cat.id">{{cat.name}}</ion-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-        <ion-col col-auto>
-          <button style="float:right;" ion-button color="primary" (click)="addNewCategory()">
-            <ion-icon name="add">Add new</ion-icon>
-          </button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </form>
-  <button ion-button color="primary" block large>Save Changes</button>
+  <ion-label>Account</ion-label>
+  <ion-list radio-group>
+    <ion-item>
+      <ion-label>Chequing</ion-label>
+      <ion-radio value="Chequing"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Savings</ion-label>
+      <ion-radio value="Savings"></ion-radio>
+    </ion-item>
+  </ion-list>
+  <ion-label>Transaction Type</ion-label>
+  <ion-list radio-group [(ngModel)]="transaction.type">
+    <ion-item>
+      <ion-label>Deposit</ion-label>
+      <ion-radio value="deposit"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Withdrawal</ion-label>
+      <ion-radio value="withdrawal"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-input type="number" placeholder="Amount" [(ngModel)]="transaction.amount"></ion-input>
+    </ion-item>
+  </ion-list>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Category</ion-label>
+          <ion-select [(ngModel)]="transaction.category">
+            <ion-option *ngFor="let cat of categories" [value]="cat.id">{{cat.name}}</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col col-auto>
+        <button style="float:right;" ion-button color="primary" (click)="addNewCategory()">
+          <ion-icon name="add">Add new</ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <button ion-button color="primary" block large (click)="save()">Save Changes</button>
 </ion-content>

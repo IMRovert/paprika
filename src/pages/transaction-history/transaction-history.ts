@@ -29,6 +29,8 @@ export class TransactionHistoryPage {
   //   });
   // }
   itemTapped($event, item: Transaction) {
-
+    this.navCtrl.push('EditTransactionPage', {
+      transaction: item
+    });
   }
 }
