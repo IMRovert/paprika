@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {User} from "../../models/user";
+import {Category} from "../../models/category";
 
 /*
   Generated class for the SQLiteDatabaseProvider provider.
@@ -44,11 +45,23 @@ export abstract class DatabaseProvider {
   abstract exportData(): Promise<any>;
 
   abstract importData(): Promise<any>;
+
+  abstract getCategories(): Promise<Category[]>;
+
+  abstract addCategory(name: string): Promise<boolean>;
 }
 
 
 @Injectable()
 export class SQLiteDatabaseProvider extends DatabaseProvider {
+  getCategories(): Promise<Category[]> {
+    return undefined;
+  }
+
+  addCategory(name: string): Promise<boolean> {
+    return undefined;
+  }
+
   createUser(user: User): Promise<User> {
     return undefined;
   }
