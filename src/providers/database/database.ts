@@ -27,17 +27,17 @@ export abstract class DatabaseProvider {
 
   abstract addAccount(user: object, account: object): Promise<any>;
 
-  abstract addTransaction(transaction: object): Promise<any>;
+  abstract addTransaction(transaction: Transaction): Promise<boolean>;
 
   abstract addBill(bill: object): Promise<any>;
 
-  abstract updateTransaction(id: number): Promise<Transaction>;
+  abstract updateTransaction(id: number, transaction: Transaction): Promise<boolean>;
 
   abstract updateBill(): Promise<any>;
 
   abstract payBill(): Promise<any>;
 
-  abstract getTransactionHistory(): Promise<any>;
+  abstract getTransactionHistory(): Promise<Transaction[]>;
 
   abstract getBills(): Promise<any>;
 
@@ -95,7 +95,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
-  addTransaction(transaction: object): Promise<any> {
+  addTransaction(transaction: Transaction): Promise<boolean> {
     return undefined;
   }
 
@@ -103,7 +103,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
-  updateTransaction(id: number): Promise<Transaction> {
+  updateTransaction(id: number, transaction: Transaction = null): Promise<boolean> {
     return undefined;
   }
 
@@ -115,7 +115,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
-  getTransactionHistory(): Promise<any> {
+  getTransactionHistory(): Promise<Transaction[]> {
     return undefined;
   }
 

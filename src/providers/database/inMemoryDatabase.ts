@@ -9,6 +9,7 @@ import {Category} from "../../models/category";
 export class InMemoryDatabaseProvider extends DatabaseProvider {
 
   categories: Category[];
+  transactions: Transaction[];
 
   getCategories(): Promise<Category[]> {
     return new Promise<Category[]>(resolve => resolve(this.categories));
@@ -43,10 +44,13 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     this.categories = Array();
     this.categories.push(new Category(0, "Student Loans"));
     this.categories.push(new Category(1, "Education"));
-  }
+    this.transactions = [
+      new Transaction(0, 35, 'CAD', 20318, 'Bought two pizzas from the pizza store', 256037, 'Food', 5, 'withdrawal'),
+      new Transaction(1, 66, 'CAD', 180318, 'bought an overpriced iPhone charger', 256037, 'Extras', 6, 'withdrawal'),
+      new Transaction(2, 250, 'CAD', 60817, 'inheritance check', 256037, 'Income', 1, 'deposit'),
+      new Transaction(3, 650, 'CAD', 310118, 'payed rent', 678234, 'Housing', 2, 'withdrawal'),
+      new Transaction(4, 22.44, 'CAD', 40414, 'beer pong supplies', 678234, 'Extras', 6, 'withdrawal')];
 
-  resetPassword(info: object): Promise<any> {
-    return undefined;
   }
 
   resetPassword(password: string): Promise<any> {
@@ -84,17 +88,26 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
-  addTransaction(transaction: object): Promise<any> {
-    return undefined;
+  addTransaction(transaction: Transaction): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      this.transactions.push(transaction);
+      resolve(true);
+    });
   }
 
   addBill(bill: object): Promise<any> {
     return undefined;
   }
 
-  updateTransaction(id: number): Promise<Transaction> {
-
-    return undefined;
+  updateTransaction(id: number, transaction: Transaction): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      for (let i = 0; i < this.transactions.length; i++) {
+        if (this.transactions[i].id === id) {
+          this.transactions[i] = transaction;
+        }
+      }
+      resolve(true);
+    });
   }
 
   updateBill(): Promise<any> {
@@ -105,8 +118,10 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
-  getTransactionHistory(): Promise<any> {
-    return undefined;
+  getTransactionHistory(): Promise<Transaction[]> {
+    return new Promise<Transaction[]>(resolve => {
+      resolve(this.transactions);
+    });
   }
 
   getBills(): Promise<any> {
