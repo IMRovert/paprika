@@ -36,7 +36,7 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
   }
 
   getUser(): Promise<User> {
-    return new Promise<User>(resolve => resolve.apply(this.user));
+    return new Promise<User>(resolve => resolve.apply(new User("Mr. Bla", "password", "matt@mr.bla")));
   }
 
   getAccounts(user: object): Promise<any> {
