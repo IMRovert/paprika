@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {IonicPage, MenuController, NavController, NavParams} from 'ionic-angular';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DatabaseProvider} from "../../providers/database/database";
 
 /**
@@ -15,8 +16,16 @@ import {DatabaseProvider} from "../../providers/database/database";
   templateUrl: 'login.html',
 })
 export class LoginPage implements OnInit {
-  constructor(public navCtrl: NavController, public navParams: NavParams, public menu: MenuController, private db: DatabaseProvider) {
+  private login: FormGroup;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              public menu: MenuController, private formBuilder: FormBuilder, private db: DatabaseProvider) {
+    this.login = this.formBuilder.group({
+      email: ['', Validators.compose([Validators.email, Validators.required])],
+      password: ['', Validators.compose([Validators.required, Validators.minLength(8)])],
+    })
   }
+
 
   ngOnInit(): void {
     this.menu.enable(false);
@@ -32,12 +41,21 @@ export class LoginPage implements OnInit {
     this.navCtrl.push('RegisterPage');
   }
 
-  login() {
-    console.log("teset");
+  signIn() {
+    console.log("test");
     // TODO: Real Login code to check credentials
+    this.db.getUser().then(value => {
+      console.log(value);
+      if (this.login.controls["email"].value == value.email && this.login.controls["password"].value == value.password) {
+        this.navCtrl.setRoot('TransactionHistoryPage');
+        this.menu.enable(true);
+      }else{
 
+      }
+    })
+
+
+    console.log(this.login.value)
     // Navigate to home page as new root
-    this.navCtrl.setRoot('TransactionHistoryPage');
-    this.menu.enable(true);
   }
 }
