@@ -1,29 +1,35 @@
-import {Component} from "@angular/core";
-import {NavController, NavParams} from 'ionic-angular';
-import {ItemDetailsPage} from '../item-details/item-details';
+import { Component } from '@angular/core';
 
+import { NavController, NavParams } from 'ionic-angular';
+
+import { ItemDetailsPage } from '../item-details/item-details';
+import {transaction} from "../../models/transaction";
 
 @Component({
+  selector: 'page-list',
   templateUrl: 'list.html'
 })
 export class ListPage {
-  selectedItem: any;
   icons: string[];
-  items: Array<{ title: string, note: string, icon: string }>;
+  transList: transaction[];
+  items: Array<{title: string, note: string, icon: string}>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    // If we navigated to this page, we will have an item available as a nav param
-    this.selectedItem = navParams.get('item');
-
-    this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
-      'american-football', 'boat', 'bluetooth', 'build'];
+    this.icons = ['log-in', 'log-out'];
+    this.transList = [
+      new transaction(35, 'CAD', 20318, 'Bought two pizzas from the pizza store', 256037, 'Food', 5, 'withdrawal'),
+      new transaction(66, 'CAD', 180318, 'bought an overpriced iPhone charger', 256037, 'Extras', 6, 'withdrawal'),
+      new transaction(250, 'CAD', 60817, 'inheritance check', 256037, 'Income', 1, 'deposit'),
+      new transaction(650, 'CAD', 310118, 'payed rent', 678234, 'Housing', 2, 'withdrawal'),
+      new transaction(22.44, 'CAD', 40414, 'beer pong supplies', 678234, 'Extras', 6, 'withdrawal')
+    ];
 
     this.items = [];
-    for (let i = 1; i < 11; i++) {
+    for(let i = 0; i < this.transList.length; i++) {
       this.items.push({
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
+        title: this.transList[i].amount.toString() + ((this.transList[i].type == 'deposit')? " +":" -"),
+        note: this.transList[i].description,
+        icon: ((this.transList[i].type == 'deposit')? this.icons[0]:this.icons[1])
       });
     }
   }
