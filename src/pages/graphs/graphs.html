@@ -14,9 +14,23 @@
 
 
 <ion-content padding>
-  <div>
-    <p style="color:#000000;">Graphs and pictures</p>
+  <button ion-button [outline]="true" (click)="openCalendar()">Range</button>
 
-    <p style="color:#000000;">Will have options to set date bounds for history.</p>
-  </div>
+  <ion-card>
+    <ion-card-header>
+      Spending by day
+    </ion-card-header>
+    <ion-card-content>
+      <canvas #histogramCanvas></canvas>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      Spending by category
+    </ion-card-header>
+    <ion-card-content>
+      <canvas #categoryCanvas></canvas>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
