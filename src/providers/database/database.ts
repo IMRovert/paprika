@@ -40,8 +40,6 @@ export abstract class DatabaseProvider {
 
   abstract getBills(): Promise<any>;
 
-  abstract getBalance(account: object): Promise<any>;
-
   abstract exportData(): Promise<any>;
 
   abstract importData(): Promise<any>;
@@ -107,10 +105,6 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   getBills(): Promise<any> {
-    return undefined;
-  }
-
-  getBalance(account: object): Promise<any> {
     return undefined;
   }
 

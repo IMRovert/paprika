@@ -3,6 +3,7 @@ import {DatabaseProvider} from "./database";
 import {User} from "../../models/user";
 import {Account} from "../../models/account";
 import {Transaction} from "../../models/transaction";
+import {Bill} from "../../models/bill";
 
 @Injectable()
 export class InMemoryDatabaseProvider extends DatabaseProvider {
@@ -16,6 +17,8 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
   private user: User;
   private account: Account;
   private accounts: Account[];
+  private transactions: Transaction[];
+  private bills: Bill[];
 
   constructor() {
     super();
@@ -23,6 +26,7 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     this.user = new User("Mr. Bla", "password", "matt@mr.bla");
     this.account = new Account(1, "Grand Spoons", "IBM", "sav", 69.69, "CAD");
     this.accounts = [];
+    this.transactions = [];
     this.accounts.push(this.account);
   }
 
@@ -57,21 +61,29 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     });
   }
 
-  addAccount(user: object, account: object): Promise<any> {
-    return undefined;
+  addAccount(account: Account): Promise<boolean> {
+    this.accounts.push(account);
+    return new Promise<boolean>(resolve => {
+      resolve(true);
+    });
   }
 
-  addTransaction(transaction: object): Promise<any> {
-    return undefined;
+  addTransaction(transaction: Transaction): Promise<boolean> {
+    this.transactions.push(transaction);
+    return new Promise<boolean>(resolve => {
+      resolve(true);
+    });
   }
 
-  addBill(bill: object): Promise<any> {
-    return undefined;
+  addBill(bill: Bill): Promise<boolean> {
+    this.bills.push(bill);
+    return new Promise<boolean>(resolve => {
+      resolve(true);
+    });
   }
 
   updateTransaction(id: number): Promise<Transaction> {
-
-    return undefined;
+      return null;
   }
 
   updateBill(): Promise<any> {
@@ -87,10 +99,6 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
   }
 
   getBills(): Promise<any> {
-    return undefined;
-  }
-
-  getBalance(account: object): Promise<any> {
     return undefined;
   }
 

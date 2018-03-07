@@ -2,6 +2,7 @@ import {Category} from "./category";
 
 
 export class Transaction {
+  private _id: number;
   private _amount: number;
   private _currency: string;
   private _date: number;
@@ -11,7 +12,8 @@ export class Transaction {
   private _type: string;
 
 
-  constructor(amount: number, currency: string, date: number, description: string, account: number, categoryName: string, categoryNumber: number, type: string) {
+  constructor(id: number, amount: number, currency: string, date: number, description: string, account: number, categoryName: string, categoryNumber: number, type: string) {
+    this._id = id;
     this._amount = amount;
     this._currency = currency;
     this._date = date;
@@ -22,7 +24,7 @@ export class Transaction {
     this._type = type;
   }
 
-  editValues(amount: number, currency: string, date: number, description: string, account: number):void{
+  editValues(amount: number, currency: string, date: number, description: string, account: number): void {
     this._amount = amount;
     this._currency = currency;
     this._date = date;
@@ -30,7 +32,7 @@ export class Transaction {
     this._account = account;
   }
 
-  editCategory(categoryName: string, categoryNumber: number){
+  editCategory(categoryName: string, categoryNumber: number) {
     this._category.name = categoryName;
     this._category.code = categoryNumber;
   }
