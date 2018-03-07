@@ -53,7 +53,7 @@ export class RegisterPage {
     console.log(this.register.value)
     let user = new User(this.register.controls["name"].value,this.register.controls["password"].value, this.register.controls["email"].value);
     this.db.createUser(user).then(value => {
-      this.navCtrl.setRoot('HomePage');
+      this.navCtrl.setRoot('TransactionHistoryPage');
       this.menu.enable(true);
     })
   }
