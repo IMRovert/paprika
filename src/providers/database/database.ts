@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {User} from "../../models/user";
 import {Transaction} from "../../models/transaction";
+import {Category} from "../../models/category";
 
 /*
   Generated class for the SQLiteDatabaseProvider provider.
@@ -26,17 +27,17 @@ export abstract class DatabaseProvider {
 
   abstract addAccount(user: object, account: object): Promise<any>;
 
-  abstract addTransaction(transaction: object): Promise<any>;
+  abstract addTransaction(transaction: Transaction): Promise<boolean>;
 
   abstract addBill(bill: object): Promise<any>;
 
-  abstract updateTransaction(id: number): Promise<Transaction>;
+  abstract updateTransaction(id: number, transaction: Transaction): Promise<boolean>;
 
   abstract updateBill(): Promise<any>;
 
   abstract payBill(): Promise<any>;
 
-  abstract getTransactionHistory(): Promise<any>;
+  abstract getTransactionHistory(): Promise<Transaction[]>;
 
   abstract getBills(): Promise<any>;
 
@@ -45,11 +46,23 @@ export abstract class DatabaseProvider {
   abstract exportData(): Promise<any>;
 
   abstract importData(): Promise<any>;
+
+  abstract getCategories(): Promise<Category[]>;
+
+  abstract addCategory(name: string): Promise<boolean>;
 }
 
 
 @Injectable()
 export class SQLiteDatabaseProvider extends DatabaseProvider {
+  getCategories(): Promise<Category[]> {
+    return undefined;
+  }
+
+  addCategory(name: string): Promise<boolean> {
+    return undefined;
+  }
+
   createUser(user: User): Promise<User> {
     return undefined;
   }
@@ -82,7 +95,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
-  addTransaction(transaction: object): Promise<any> {
+  addTransaction(transaction: Transaction): Promise<boolean> {
     return undefined;
   }
 
@@ -90,7 +103,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
-  updateTransaction(id: number): Promise<Transaction> {
+  updateTransaction(id: number, transaction: Transaction = null): Promise<boolean> {
     return undefined;
   }
 
@@ -102,7 +115,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
-  getTransactionHistory(): Promise<any> {
+  getTransactionHistory(): Promise<Transaction[]> {
     return undefined;
   }
 
