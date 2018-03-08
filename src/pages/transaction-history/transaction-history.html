@@ -14,7 +14,7 @@
   <ion-list *ngIf="transList.length > 0">
     <button ion-item *ngFor="let trans of transList" (click)="itemTapped($event, trans)">
       <ion-icon [name]="trans.type === 'deposit' ? 'log-in' : 'log-out'" item-left></ion-icon>
-      {{ trans.amount}}
+      ${{ trans.amount}}
       <div class="item-note" item-right>
         {{trans.description}}
       </div>

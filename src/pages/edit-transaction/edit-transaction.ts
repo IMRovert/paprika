@@ -96,4 +96,8 @@ export class EditTransactionPage {
       })
     }
   }
+
+  compareCat(e1: Category, e2: Category) {
+    return e1.id === e2.id;
+  }
 }

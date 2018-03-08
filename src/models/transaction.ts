@@ -7,7 +7,7 @@ export class Transaction {
   date: number;
   description: string;
   account: number;
-  category;
+  category: Category;
   type: string;
   id: number;
 

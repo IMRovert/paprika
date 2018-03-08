@@ -42,8 +42,13 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     this.accounts = [];
     this.accounts.push(this.account);
     this.categories = Array();
-    this.categories.push(new Category(0, "Student Loans"));
-    this.categories.push(new Category(1, "Education"));
+    this.categories.push(new Category(0, "Entertainment"));
+    this.categories.push(new Category(1, "Income"));
+    this.categories.push(new Category(2, "Housing"));
+    this.categories.push(new Category(3, "Student Loans"));
+    this.categories.push(new Category(4, "Education"));
+    this.categories.push(new Category(5, "Food"));
+    this.categories.push(new Category(6, "Extras"));
     this.transactions = [
       new Transaction(0, 35, 'CAD', 20318, 'Bought two pizzas from the pizza store', 256037, 'Food', 5, 'withdrawal'),
       new Transaction(1, 66, 'CAD', 180318, 'bought an overpriced iPhone charger', 256037, 'Extras', 6, 'withdrawal'),
