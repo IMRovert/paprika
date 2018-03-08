@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
 import { File } from '@ionic-native/file';
 import { HTTP } from '@ionic-native/http';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 /**
  * Generated class for the ImportPage page.
@@ -16,8 +17,9 @@ import { HTTP } from '@ionic-native/http';
   templateUrl: 'import.html',
 })
 export class ImportPage {
+  private importFile: FormGroup;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, public plat : Platform, private http : HTTP) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, public plat : Platform, private http : HTTP, private formBuilder: FormBuilder) {
 
    /* checkFile(path, file);
     createFile(path, file, false);
@@ -26,6 +28,12 @@ export class ImportPage {
 
     this.file.readFile(
     */
+
+    this.importFile = this.formBuilder.group({
+      accountname: [''],
+      balance: [''],
+      fileName: ['']
+    });
 
   }
 
@@ -61,23 +69,40 @@ export class ImportPage {
       /* Get file from HTML form */
 
     }
-
+    //console.log(this.importFile.value);
     let testdata;
-    this.http.get('ImportFiles/test.txt', {}, {}).then((data) => {
+    this.http.get('ImportFiles/' + this.importFile.value.fileName, {}, {}).then((data) => {
       console.log(data);
-      testdata = data.data;
+      testdata = "" + data.data;
       console.log(testdata)
+      console.log(typeof testdata);
+      //let fileText = "Date,Amount,Payee,Desc\n09-12-24,550.0,Trevor,Making Bank Yo\n09-07-06,200.55,Russell,#Dolla";
+      let lines = testdata.split("\n");
+      let items = [""];
+      let headers = lines[0].split(",");
+      /*for(var k = 0;k < headers.length;k++) {
+        console.log(headers[k]);
+      }*/
+      for(var i = 1; i < lines.length;i++) {
+        console.log(lines[i]);
+        items = lines[i].split(",");
+        for(var j = 0; j < items.length;j++) {
+          console.log(headers[j] + ": " + items[j]);
+        };
+
+
+      }
     }).catch((err) => {console.log("File read error: " + err.toString())});
 
 
 
-    let fileText = "Date,Amount,Payee,Desc\n09-12-24,550.0,Trevor,Making Bank Yo\n09-07-06,200.55,Russell,#Dolla";
-    let lines = fileText.split("\n");
+    /*let fileText = "Date,Amount,Payee,Desc\n09-12-24,550.0,Trevor,Making Bank Yo\n09-07-06,200.55,Russell,#Dolla";
+    let lines = testdata.split("\n");
     let items = [""];
     let headers = lines[0].split(",");
     /*for(var k = 0;k < headers.length;k++) {
       console.log(headers[k]);
-    }*/
+    }
     for(var i = 1; i < lines.length;i++) {
       console.log(lines[i]);
       items = lines[i].split(",");
@@ -86,7 +111,7 @@ export class ImportPage {
       };
 
 
-    };
+    }; */
     /*Insert Items into database
     * */
 

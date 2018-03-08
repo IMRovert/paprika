@@ -17,11 +17,11 @@
   <div id="import-markdown11" class="show-list-numbers-and-dots">
     <p>Will contain information needed to find the data that the user would like to import.</p>
   </div>
-  <form id="importform" (submit)="readFile()">
+  <form [formGroup]="importFile" (ngSubmit)="readFile()">
     <ion-list>
       <ion-item>
         <ion-label floating>Name of this Account</ion-label>
-        <ion-input id="accountname" type="text" name="accountname"></ion-input>
+        <ion-input id="accountname" type="text" formControlName="accountname"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating>Current Balance</ion-label>
@@ -32,8 +32,8 @@
         <ion-input id="currency" type="text" name="currency"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Select a file</ion-label>
-        <ion-input id="inputfile" type="file" name="inputfile"></ion-input>
+        <ion-label>File Name</ion-label>
+        <ion-input id="inputfile" type="text" formControlName="fileName"></ion-input>
       </ion-item>
       <ion-item>
         <button type="submit" color="dark" ion-button block large>Import File</button>
