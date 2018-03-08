@@ -13,8 +13,9 @@ export class MyApp implements OnInit {
   profilePage = 'ProfilePage';
   graphs = 'GraphsPage';
   importPage = 'ImportPage';
-  addTransactionPage = 'AddTransactionPage';
+  addTransactionPage = 'EditTransactionPage';
   homePage = TransactionHistoryPage;
+  editCat = 'EditTransactionPage';
   exportPage = 'ExportPage';
 
   @ViewChild('content') nav: NavController;
