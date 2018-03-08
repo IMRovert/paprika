@@ -10,12 +10,14 @@
 <!--<ion-title>Login</ion-title>-->
 <!--</ion-navbar>-->
 <!--</ion-header>-->
-<ion-content padding class="red-background">
+<ion-content class="red-background">
+  <div>
+    <img src="../../assets/svgs/black-gold.svg"
+         style="width: 100%; height: 20rem; margin-top: 6rem;">
+  </div>
+</ion-content>
+<ion-footer padding class="red-background">
   <form id="login-form1" [formGroup]="login" (ngSubmit)="signIn()">
-    <div>
-      <img src="../../assets/imgs/mA6qrJcMQSKdzyUWh1ht_chrome_2018-02-19_14-42-26.png"
-           style="width: 100%; height: auto;">
-    </div>
     <ion-list id="login-list1">
       <ion-item>
         <ion-label floating>Email</ion-label>
@@ -28,5 +30,5 @@
     </ion-list>
     <button ion-button type="submit" color="dark" block large [disabled]="!login.valid">Log in</button>
   </form>
-  <button (click)="goToRegister()" ion-button block large outline>Or create an account</button>
-</ion-content>
+  <button (click)="goToRegister()" color="secondary" ion-button block large outline>Or create an account</button>
+</ion-footer>
