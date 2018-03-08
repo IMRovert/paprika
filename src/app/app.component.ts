@@ -1,14 +1,26 @@
-import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {MenuController, NavController, Platform} from 'ionic-angular';
+import {StatusBar} from '@ionic-native/status-bar';
+import {SplashScreen} from '@ionic-native/splash-screen';
+import {LoginPage} from "../pages/login/login";
+import {TransactionHistoryPage} from "../pages/transaction-history/transaction-history";
 
-import { HomePage } from '../pages/home/home';
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp {
-  rootPage:any = HomePage;
+export class MyApp implements OnInit {
+  rootPage: any = LoginPage;
+  profilePage = 'ProfilePage';
+  graphs = 'GraphsPage';
+  importPage = 'ImportPage';
+  addTransactionPage = 'EditTransactionPage';
+  homePage = TransactionHistoryPage;
+  editCat = 'EditTransactionPage';
+  exportPage = 'ExportPage';
+
+  @ViewChild('content') nav: NavController;
+
+  @ViewChild('mainMenu') mainMenu: MenuController;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
@@ -18,5 +30,26 @@ export class MyApp {
       splashScreen.hide();
     });
   }
+
+
+  ngOnInit(): void {
+  }
+
+  openPage(page: any) {
+
+    if (page === this.homePage) {
+      this.nav.popToRoot();
+      this.mainMenu.close();
+    } else {
+      this.nav.push(page);
+      this.mainMenu.close();
+    }
+  }
+
+  logout() {
+    this.nav.setRoot('LoginPage');
+    this.mainMenu.close();
+  }
+
 }
 

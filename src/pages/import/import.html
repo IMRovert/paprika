@@ -1,0 +1,47 @@
+<!--
+  Generated template for the ImportPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Import</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div id="import-markdown11" class="show-list-numbers-and-dots">
+  </div>
+  <form [formGroup]="importFile" (ngSubmit)="readFile()">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Name of this Account</ion-label>
+        <ion-input id="accountname" type="text" formControlName="accountname" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating required>Current Balance</ion-label>
+        <ion-input id="balance" type="text" formControlName="balance"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating required >Currency</ion-label>
+        <ion-select id="currency" formControlName="currency">
+          <ion-option value="CAD">CAD</ion-option>
+          <ion-option value="USD">USD</ion-option>
+          <ion-option value="Euro">Euro</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>File Name</ion-label>
+        <ion-input id="inputfile" type="text" formControlName="fileName" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <button type="submit" color="dark" ion-button block large [disabled]="!importFile.valid">Import File</button>
+      </ion-item>
+    </ion-list>
+  </form>
+  <!--<button ion-button large block>Import Data</button> -->
+</ion-content>

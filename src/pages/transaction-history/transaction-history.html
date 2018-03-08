@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Transaction History</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-fab right bottom>
+    <button ion-fab (click)="addTransaction()"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+  <ion-list *ngIf="transList.length > 0">
+    <button ion-item *ngFor="let trans of transList" (click)="itemTapped($event, trans)">
+      <ion-icon [name]="trans.type === 'deposit' ? 'log-in' : 'log-out'" item-left></ion-icon>
+      ${{ trans.amount}}
+      <div class="item-note" item-right *ngIf="trans.category">
+        {{trans.category.name}}
+      </div>
+      <div class="item-note">
+        {{trans.description}}
+      </div>
+    </button>
+  </ion-list>
+  <ion-card>
+    <img src="assets/imgs/sample ad.png"/>
+    <ion-card-content>
+      <ion-card-title>
+        Sponsor/Ad
+      </ion-card-title>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

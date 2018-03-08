@@ -1,0 +1,2 @@
+Add device configuration specifications to software design doc
+For browser uses, requires, 

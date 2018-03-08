@@ -1,0 +1,33 @@
+<!--
+  Generated template for the LoginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<!--No nav bar on login page-->
+<!--<ion-header>-->
+<!--<ion-navbar>-->
+<!--<ion-title>Login</ion-title>-->
+<!--</ion-navbar>-->
+<!--</ion-header>-->
+<ion-content class="red-background">
+  <div>
+    <img src="assets/svgs/black-gold.svg" style="width: 100%; height: 20rem; margin-top: 6rem;">
+  </div>
+</ion-content>
+<ion-footer padding class="red-background">
+  <form id="login-form1" [formGroup]="login" (ngSubmit)="signIn()">
+    <ion-list id="login-list1">
+      <ion-item>
+        <ion-label floating>Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+      </ion-item>
+    </ion-list>
+    <button ion-button type="submit" color="dark" block large [disabled]="!login.valid">Log in</button>
+  </form>
+  <button (click)="goToRegister()" color="secondary" ion-button block large outline>Or create an account</button>
+</ion-footer>

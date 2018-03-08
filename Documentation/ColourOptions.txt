@@ -1,0 +1,7 @@
+Main Red: #cc270e 		Highlight Red: #ffe8e5
+
+Main Background: #f2efe6 	Highlight Background: #fcfcfc
+
+Main Dark: #1e1d1d		Highlight Dark: #470808
+
+Gold: #fcce5a			
