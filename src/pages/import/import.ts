@@ -30,9 +30,10 @@ export class ImportPage {
     */
 
     this.importFile = this.formBuilder.group({
-      accountname: [''],
-      balance: [''],
-      fileName: ['']
+      accountname: ['', Validators.required],
+      balance: ['', Validators.required],
+      currency: ['', Validators.required],
+      fileName: ['', Validators.required]
     });
 
   }
@@ -71,28 +72,44 @@ export class ImportPage {
     }
     //console.log(this.importFile.value);
     let testdata;
-    this.http.get('ImportFiles/' + this.importFile.value.fileName, {}, {}).then((data) => {
-      console.log(data);
+    this.http.get('ImportFiles/' + this.importFile.value.fileName + '.csv', {}, {}).then((data) => {
+      //console.log(data);
       testdata = "" + data.data;
-      console.log(testdata)
-      console.log(typeof testdata);
+      let message = "";
+      console.log('Data successfully imported to Account:\nAccount Name: ' + this.importFile.value.accountname + ' Imported From File: ' + this.importFile.value.fileName)
+      message = message + 'Data successfully imported to Account:\nAccount Name: ' + this.importFile.value.accountname + '    Imported From File: ' + this.importFile.value.fileName;
+      message = message + '\nCurrency: ' + this.importFile.value.currency + '    Balance: ' + this.importFile.value.balance;
+      console.log('The following tuples have been read from file: ')
+
+      //console.log(testdata)
+      //console.log(typeof testdata);
       //let fileText = "Date,Amount,Payee,Desc\n09-12-24,550.0,Trevor,Making Bank Yo\n09-07-06,200.55,Russell,#Dolla";
       let lines = testdata.split("\n");
       let items = [""];
       let headers = lines[0].split(",");
-      /*for(var k = 0;k < headers.length;k++) {
-        console.log(headers[k]);
-      }*/
+      message = message + '\nHeaders: \n'
+      for(var k = 0;k < headers.length;k++) {
+        //console.log(headers[k]);
+        message = message + headers[k] + ' ';
+      }
+      message = message + '\nThe following tuples have been read from file:\n'
       for(var i = 1; i < lines.length;i++) {
-        console.log(lines[i]);
+        //console.log(lines[i]);
+        message = message + lines[i];
         items = lines[i].split(",");
+        let tuple = '';
         for(var j = 0; j < items.length;j++) {
-          console.log(headers[j] + ": " + items[j]);
+          tuple = tuple + headers[j] + ": " + items[j] + ' ';
+
         };
+        console.log(tuple);
+        //message = message + '\n' + tuple;
 
 
       }
-    }).catch((err) => {console.log("File read error: " + err.toString())});
+      alert(message);
+    }).catch((err) => {console.log("File read error: " + err.toString());
+    alert("Error: The file specified does not exist")});
 
 
 
