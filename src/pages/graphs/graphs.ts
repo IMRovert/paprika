@@ -36,7 +36,7 @@ export class GraphsPage {
   redBorder = 'rgba(255,99,132,1)';
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, private db: DatabaseProvider) {
-    this.dateRange = {to: Date(), from: Date()};
+    this.dateRange = {from: null, to:null};
     this.dateRange.from = moment().add(-7, "days").toDate();
     this.dateRange.to = moment().toDate();
   }
