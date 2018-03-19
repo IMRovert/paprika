@@ -1,0 +1,68 @@
+<!--
+  Generated template for the EditTransactionPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{title}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-label>Account</ion-label>
+  <ion-list radio-group>
+    <ion-item>
+      <ion-label>Chequing</ion-label>
+      <ion-radio value="Chequing"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Savings</ion-label>
+      <ion-radio value="Savings"></ion-radio>
+    </ion-item>
+  </ion-list>
+  <ion-label>Transaction Type</ion-label>
+  <ion-list radio-group [(ngModel)]="transaction.type">
+    <ion-item>
+      <ion-label>Deposit</ion-label>
+      <ion-radio value="deposit"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Withdrawal</ion-label>
+      <ion-radio value="withdrawal"></ion-radio>
+    </ion-item>
+  </ion-list>
+  <ion-list>
+    <ion-item>
+      <ion-label floating>Description</ion-label>
+      <ion-textarea [(ngModel)]="transaction.description"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Amount</ion-label>
+      <ion-input type="number" [(ngModel)]="transaction.amount"></ion-input>
+    </ion-item>
+  </ion-list>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Category</ion-label>
+          <ion-select [(ngModel)]="transaction.category" [compareWith]="compareCat">
+            <ion-option *ngFor="let cat of categories" [value]="cat">
+              {{cat.name}}
+            </ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col col-auto>
+        <button style="float:right;" ion-button color="primary" (click)="addNewCategory()">
+          <ion-icon name="add">Add new</ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <button ion-button color="primary" block large (click)="save()" *ngIf="edit">Save Changes</button>
+  <button ion-button color="primary" block large (click)="save()" *ngIf="!edit">Add Transaction</button>
+</ion-content>
