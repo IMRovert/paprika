@@ -10,7 +10,6 @@ import {Bill} from "../../models/bill";
 export class InMemoryDatabaseProvider extends DatabaseProvider {
 
   categories: Category[];
-  transactions: Transaction[];
 
   getCategories(): Promise<Category[]> {
     return new Promise<Category[]>(resolve => resolve(this.categories));
