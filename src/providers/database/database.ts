@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {User} from "../../models/user";
 import {Transaction} from "../../models/transaction";
+import {SQLite, SQLiteObject} from "@ionic-native/sqlite";
+import {Platform} from "ionic-angular";
 
 /*
   Generated class for the SQLiteDatabaseProvider provider.
@@ -53,7 +55,10 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   getUser(): Promise<User> {
-    return undefined;
+    return new Promise<User>(resolve => {
+      let u = new User("Matt", "password2", "matt@mr.bla");
+      resolve(u);
+    });
   }
 
   resetPassword(password: string): Promise<any> {
@@ -68,15 +73,18 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
-  verifyCredentials(name: string, password: string): Promise<boolean> {
-    return undefined;
+  verifyCredentials(email: string, password: string): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+
+      resolve(email == null && password == null);
+    });
   }
 
   getAccounts(): Promise<any> {
     return undefined;
   }
 
-  addAccount(user: object, account: object): Promise<any> {
+  addAccount(user: object, account: Account): Promise<any> {
     return undefined;
   }
 
@@ -101,7 +109,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   getTransactionHistory(): Promise<any> {
-    return undefined;
+    return this.db.executeSql("SELECT * FROM transaction", {});
   }
 
   getBills(): Promise<any> {
@@ -116,10 +124,62 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
-  constructor() {
+  db: SQLiteObject;
+
+  constructor(private platform: Platform, private sqlite: SQLite) {
     super();
+    platform.ready()
+      .then(value => {
+        return this.sqlite.create({
+          name: 'data.db',
+          location: 'default'
+        }).then(dbobj => {
+          this.db = dbobj;
+          return this.createTables(dbobj);
+        }).catch(reason => {
+          console.log("DB ERROR: " + reason);
+        });
+      });
+
     console.log('Hello SQLiteDatabaseProvider Provider');
+
   }
 
+  private createTables(dbobj) {
+    dbobj.executeSql('CREATE TABLE IF NOT EXISTS account(\n' +
+      '  id int PRIMARY KEY AUTOINCREMENT,\n' +
+      '  branch text,\n' +
+      '  bank text,\n' +
+      '  type text,\n' +
+      '  balance numeric(8,2),\n' +
+      '  currency text),\n' +
+      ');', {}).then(
+      dbobj.executeSql('CREATE TABLE IF NOT EXISTS bill(\n' +
+        '  date integer,\n' +
+        '  payee text,\n' +
+        '  amount numeric(8,2),\n' +
+        '  repeat text,\n' +
+        '  paid tinyint,\n' +
+        '  CONSTRAINT prim PRIMARY KEY(date, payee)\n' +
+        ');', {})
+    ).then(
+      dbobj.executeSql('CREATE TABLE IF NOT EXISTS category (\n' +
+        '  code int PRIMARY KEY AUTOINCREMENT,\n' +
+        '  name text\n' +
+        ');', {}))
+      .then(
+        dbobj.executeSql('CREATE TABLE IF NOT EXISTS transaction (\n' +
+          '  id int PRIMARY KEY AUTOINCREMENT,\n' +
+          '  amount NUMERIC(5,2),\n' +
+          '  currency text,\n' +
+          '  date DATETIME,\n' +
+          '  description text,\n' +
+          '  account INTEGER,\n' +
+          '  category int,\n' +
+          '  type text,\n' +
+          '  CONSTRAINT acc FOREIGN KEY(account) REFERENCES account(id) ON DELETE SET NULL ON UPDATE CASCADE\n' +
+          '  CONSTRAINT cat FOREIGN KEY(category) REFERENCES category(code) ON DELETE SET NULL ON UPDATE CASCADE\n' +
+          ');', {}));
+  }
 }
 
