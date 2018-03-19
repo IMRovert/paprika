@@ -4,12 +4,38 @@ import {User} from "../../models/user";
 import {Account} from "../../models/account";
 import {Transaction} from "../../models/transaction";
 import {Category} from "../../models/category";
+import moment from 'moment';
 
 @Injectable()
 export class InMemoryDatabaseProvider extends DatabaseProvider {
 
   categories: Category[];
   transactions: Transaction[];
+
+  getCategoryChartData(startDate: Date, endDate: Date): Promise<Array<{ name: string; amount: number }>> {
+    return new Promise<Array<{ name: string, amount: number }>>(resolve => {
+      let data = Array();
+      data.push({name: "Food", amount: 200});
+      data.push({name: "Gas", amount: 400});
+      data.push({name: "Entertainment", amount: 40});
+      data.push({name: "Student Loans", amount: 500});
+      resolve(data);
+    });
+  }
+
+
+  getSpendingChartData(startDate: Date, endDate: Date): Promise<Array<{ date: Date; amount: number }>> {
+    return new Promise<Array<{ date: Date, amount: number }>>(resolve => {
+      let data = Array<{ date: Date; amount: number }>();
+      let start = moment(startDate);
+      data.push({date: start.toDate(), amount: 200});
+      data.push({date: start.add(1, 'day').toDate(), amount: 400});
+      data.push({date: start.add(2, 'day').toDate(), amount: 250});
+      data.push({date: start.add(3, 'day').toDate(), amount: 0});
+      data.push({date: start.add(4, 'day').toDate(), amount: 10});
+      resolve(data);
+    });
+  }
 
   getCategories(): Promise<Category[]> {
     return new Promise<Category[]>(resolve => resolve(this.categories));
