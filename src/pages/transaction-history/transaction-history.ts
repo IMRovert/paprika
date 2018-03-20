@@ -11,16 +11,21 @@ import {DatabaseProvider} from "../../providers/database/database";
   templateUrl: 'transaction-history.html'
 })
 export class TransactionHistoryPage {
-  icons: string[];
   transList: Transaction[];
+  accList: Account[];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private db: DatabaseProvider) {
-    this.icons = ['log-in', 'log-out'];
     this.transList = [];
+    this.accList = [];
     this.db.getTransactionHistory().then(value => {
       console.log(value);
       this.transList = value;
     });
+    this.db.getAccounts().then(value => {
+      console.log(value);
+      this.accList = value;
+    });
+
   }
 
   itemTapped($event, item: Transaction) {
