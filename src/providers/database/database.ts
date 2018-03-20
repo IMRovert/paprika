@@ -141,57 +141,64 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
 
   constructor(private platform: Platform, private sqlite: SQLite) {
     super();
-    platform.ready()
-      .then(value => {
-        return this.sqlite.create({
-          name: 'data.db',
-          location: 'default'
-        }).then(dbobj => {
-          this.db = dbobj;
-          return this.createTables(dbobj);
-        }).catch(reason => {
-          console.log("DB ERROR: " + reason);
-        });
-      });
+    platform.ready().then(value => {
+      console.log(value);
+      sqlite.create({
+        name: 'data.db',
+        location: 'default'
+      }).then(value2 => {
+        this.db = value2;
+        console.log("DB SUCCESS");
+        return this.createTables(value2);
+      }).catch(reason => {
+        console.log("DB ERROR: " + reason);
+      })
+    });
 
     console.log('Hello SQLiteDatabaseProvider Provider');
 
   }
 
   private createTables(dbobj) {
-    dbobj.executeSql('CREATE TABLE IF NOT EXISTS account(\n' +
-      '  id int PRIMARY KEY AUTOINCREMENT,\n' +
-      '  branch text,\n' +
-      '  bank text,\n' +
-      '  type text,\n' +
+    return dbobj.executeSql(
+      'CREATE TABLE IF NOT EXISTS account (\n' +
+      '  id       INTEGER PRIMARY KEY,\n' +
+      '  branch   TEXT,\n' +
+      '  bank     TEXT,\n' +
+      '  type     TEXT,\n' +
       '  balance numeric(8,2),\n' +
-      '  currency text),\n' +
+      '  currency TEXT\n' +
       ');', {}).then(
-      dbobj.executeSql('CREATE TABLE IF NOT EXISTS bill(\n' +
-        '  date integer,\n' +
-        '  payee text,\n' +
-        '  amount numeric(8,2),\n' +
-        '  repeat text,\n' +
-        '  paid tinyint,\n' +
-        '  CONSTRAINT prim PRIMARY KEY(date, payee)\n' +
+      dbobj.executeSql(
+        'CREATE TABLE IF NOT EXISTS bill (\n' +
+        '  DATE   INTEGER,\n' +
+        '  payee  TEXT,\n' +
+        '  amount NUMERIC(8, 2),\n' +
+        '  repeat TEXT,\n' +
+        '  paid   TINYINT,\n' +
+        '  CONSTRAINT prim PRIMARY KEY (DATE, payee)\n' +
         ');', {})
     ).then(
-      dbobj.executeSql('CREATE TABLE IF NOT EXISTS category (\n' +
-        '  code int PRIMARY KEY AUTOINCREMENT,\n' +
-        '  name text\n' +
+      dbobj.executeSql(
+        'CREATE TABLE IF NOT EXISTS category (\n' +
+        '  code INTEGER PRIMARY KEY AUTOINCREMENT,\n' +
+        '  name TEXT\n' +
         ');', {}))
       .then(
-        dbobj.executeSql('CREATE TABLE IF NOT EXISTS transaction (\n' +
-          '  id int PRIMARY KEY AUTOINCREMENT,\n' +
-          '  amount NUMERIC(5,2),\n' +
-          '  currency text,\n' +
-          '  date DATETIME,\n' +
-          '  description text,\n' +
-          '  account INTEGER,\n' +
-          '  category int,\n' +
-          '  type text,\n' +
-          '  CONSTRAINT acc FOREIGN KEY(account) REFERENCES account(id) ON DELETE SET NULL ON UPDATE CASCADE\n' +
-          '  CONSTRAINT cat FOREIGN KEY(category) REFERENCES category(code) ON DELETE SET NULL ON UPDATE CASCADE\n' +
+        dbobj.executeSql(
+          'CREATE TABLE IF NOT EXISTS transactions (\n' +
+          '  id          INTEGER PRIMARY KEY AUTOINCREMENT,\n' +
+          '  amount      NUMERIC(5, 2),\n' +
+          '  currency    TEXT,\n' +
+          '  date        INTEGER,\n' +
+          '  description TEXT,\n' +
+          '  account     INTEGER,\n' +
+          '  category    INTEGER,\n' +
+          '  type        TEXT,\n' +
+          '  CONSTRAINT acc FOREIGN KEY (account) REFERENCES account (id)\n' +
+          '    ON DELETE SET NULL\n' +
+          '    ON UPDATE CASCADE\n' +
+          '    CONSTRAINT cat FOREIGN KEY (category) REFERENCES category(code) ON DELETE SET NULL ON UPDATE CASCADE\n' +
           ');', {}));
   }
 }
