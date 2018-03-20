@@ -4,6 +4,7 @@ import {Transaction} from "../../models/transaction";
 import {Category} from "../../models/category";
 import {SQLite, SQLiteObject} from "@ionic-native/sqlite";
 import {Platform} from "ionic-angular";
+import set = Reflect.set;
 
 /*
   Generated class for the SQLiteDatabaseProvider provider.
@@ -77,7 +78,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   createUser(user: User): Promise<User> {
-    return undefined;
+    return this.accountInfo.overwriteUser(user);
   }
 
   getUser(): Promise<User> {
@@ -85,6 +86,10 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
       let u = new User("Matt", "password2", "matt@mr.bla");
       resolve(u);
     });
+    /*return new Promise<User>(resolve => {
+      resolve(this.accountInfo.getUser());
+    });
+    */
   }
 
   resetPassword(password: string): Promise<any> {
@@ -101,8 +106,8 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
 
   verifyCredentials(email: string, password: string): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-
-      resolve(email == null && password == null);
+      let u = this.accountInfo.getUser();
+      resolve(email == u.email && password == u.password);
     });
   }
 
@@ -151,9 +156,11 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   db: SQLiteObject;
+  accountInfo: userInfo;
 
   constructor(private platform: Platform, private sqlite: SQLite) {
     super();
+    let accountInfo = new userInfo(new Storage());
     platform.ready().then(value => {
       console.log(value);
       sqlite.create({
@@ -214,5 +221,37 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
           '    CONSTRAINT cat FOREIGN KEY (category) REFERENCES category(code) ON DELETE SET NULL ON UPDATE CASCADE\n' +
           ');', {}));
   }
+}
+
+@Injectable()
+export class userInfo {
+
+  private names: string[];
+  private emails: string[];
+  private passwords: string[];
+
+  constructor(private storage: Storage) {
+    storage.setItem("name", "");
+    storage.setItem("email", "");
+    storage.setItem("password", "");
+  }
+
+  overwriteUser(user: User): Promise<User> {
+    return new Promise<User>(resolve => {
+      this.names.push(this.storage.getItem("name"));
+      this.emails.push(this.storage.getItem("email"));
+      this.passwords.push(this.storage.getItem("password"));
+
+      this.storage.setItem("name", user.name);
+      this.storage.setItem("email", user.email);
+      this.storage.setItem("password", user.password);
+      resolve(user);
+    });
+  }
+
+  getUser(): User {
+    return new User(this.storage.getItem("name"), this.storage.getItem("password"), this.storage.getItem("email"));
+  }
+
 }
 

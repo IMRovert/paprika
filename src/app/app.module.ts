@@ -14,6 +14,7 @@ import {CalendarModule} from "ion2-calendar";
 import {TransactionHistoryPageModule} from "../pages/transaction-history/transaction-history.module";
 import {TransactionHistoryPage} from "../pages/transaction-history/transaction-history";
 import {SQLite} from "@ionic-native/sqlite";
+import {IonicStorageModule} from "@ionic/storage";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {SQLite} from "@ionic-native/sqlite";
     TransactionHistoryPageModule,
     ProfilePageModule,
     CalendarModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
