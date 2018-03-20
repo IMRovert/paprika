@@ -50,11 +50,24 @@ export abstract class DatabaseProvider {
   abstract getCategories(): Promise<Category[]>;
 
   abstract addCategory(name: string): Promise<boolean>;
+
+  abstract getSpendingChartData(startDate: Date, endDate: Date): Promise<Array<{ date: Date, amount: number }>>;
+
+  abstract getCategoryChartData(startDate: Date, endDate: Date): Promise<Array<{ name: string, amount: number }>>;
 }
 
 
 @Injectable()
 export class SQLiteDatabaseProvider extends DatabaseProvider {
+
+  getCategoryChartData(startDate: Date, endDate: Date): Promise<Array<{ name: string; amount: number }>> {
+    return undefined;
+  }
+
+  getSpendingChartData(startDate: Date, endDate: Date): Promise<Array<{ date: Date; amount: number }>> {
+    return undefined;
+  }
+
   getCategories(): Promise<Category[]> {
     return undefined;
   }
