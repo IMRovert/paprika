@@ -61,12 +61,24 @@ export abstract class DatabaseProvider {
 export class SQLiteDatabaseProvider extends DatabaseProvider {
 
   getCategoryChartData(startDate: Date, endDate: Date): Promise<Array<{ name: string; amount: number }>> {
-    return new Promise<Array<{ name: string, amount: number }>>(resolve => resolve([]));
+    let sql = "SELECT SUM(amount) as total, name FROM transactions JOIN category ON transactions.category = category.code WHERE date <= ? and date >= ? GROUP BY name ;";
+    return this.db.executeSql(sql, [endDate.getTime(), startDate.getTime()]).then(value => {
+      let result = [];
+      for (let i = 0; i < value.rows.length; i++) {
+        let item = value.rows.item(i);
+        result.push({name: item.name, amount: item.total});
+      }
+      console.log("Graph results");
+      console.log(result);
+      console.log(JSON.stringify(result));
+      return result;
+    });
   }
 
   getSpendingChartData(startDate: Date, endDate: Date): Promise<Array<{ date: Date; amount: number }>> {
-    let sql = "SELECT SUM(amount) as total, datetime(date, 'unixepoch', 'start of day') as day FROM transactions WHERE date <= ? and date >= ? GROUP BY day;";
+    let sql = "SELECT SUM(amount) as total, datetime(date/1000, 'unixepoch', 'start of day') as day FROM transactions WHERE date >= ? and date <= ? GROUP BY day;";
     if (!startDate || !endDate || endDate.getTime() < startDate.getTime()) {
+      console.log("Invalid graph dates");
       return new Promise<Array<{ date: Date, amount: number }>>(resolve => resolve([]));
     }
 
@@ -75,9 +87,11 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
         let result = [];
         for (let i = 0; i < value.rows.length; i++) {
           let item = value.rows.item(i);
+          console.log(item.day);
           let d = new Date(item.day);
-          result.push({date: d, amount: item.amount});
+          result.push({date: d, amount: item.total});
         }
+        console.log("Graph results");
         console.log(result);
         console.log(JSON.stringify(result));
         return result;
@@ -210,6 +224,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
         let t = [];
         for (let i = 0; i < value.rows.length; i++) {
           let item = value.rows.item(i);
+          console.log(JSON.stringify(item));
           let d = new Date();
           d.setTime(item.date);
           let trans = new Transaction(
