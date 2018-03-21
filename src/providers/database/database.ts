@@ -140,6 +140,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   getTransactionHistory(): Promise<Transaction[]> {
+    let rst = this.db.executeSql("SELECT * FROM transaction",{});
     return undefined;
   }
 
