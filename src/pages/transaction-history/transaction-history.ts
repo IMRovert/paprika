@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 
@@ -10,16 +10,21 @@ import {DatabaseProvider} from "../../providers/database/database";
   selector: 'page-transaction-history',
   templateUrl: 'transaction-history.html'
 })
-export class TransactionHistoryPage {
+export class TransactionHistoryPage implements OnInit {
   icons: string[];
   transList: Transaction[];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private db: DatabaseProvider) {
     this.icons = ['log-in', 'log-out'];
     this.transList = [];
+  }
+
+  ngOnInit(): void {
     this.db.getTransactionHistory().then(value => {
       console.log(value);
       this.transList = value;
+    }).catch(reason => {
+      console.log(reason);
     });
   }
 

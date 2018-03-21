@@ -11,6 +11,7 @@
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve",
     "ionic:serve:android": "ionic cordova run android",
+    "ionic:serve:android-live": "ionic cordova run android --livereload",
     "ionic:serve:browser": "ionic cordova run browser --livereload",
     "ionic:serve:emulate-android": "ionic cordova emulate android --livereload"
   },

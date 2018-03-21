@@ -4,7 +4,6 @@ import {Transaction} from "../../models/transaction";
 import {Category} from "../../models/category";
 import {SQLite, SQLiteObject} from "@ionic-native/sqlite";
 import {Platform} from "ionic-angular";
-import set = Reflect.set;
 
 /*
   Generated class for the SQLiteDatabaseProvider provider.
@@ -70,7 +69,14 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   getCategories(): Promise<Category[]> {
-    return undefined;
+    return this.db.executeSql("SELECT code, name FROM category;", [])
+      .then(value => {
+        console.log(value);
+        return new Promise<Category[]>(resolve => {
+          let c = Array<Category>();
+          resolve(c);
+        });
+      })
   }
 
   addCategory(name: string): Promise<boolean> {
@@ -83,7 +89,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
 
   getUser(): Promise<User> {
     return new Promise<User>(resolve => {
-      let u = new User("Matt", "password2", "matt@mr.bla");
+      let u = new User("Matt", "password", "matt@mr.bla");
       resolve(u);
     });
     /*return new Promise<User>(resolve => {
@@ -107,7 +113,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   verifyCredentials(email: string, password: string): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       let u = this.accountInfo.getUser();
-      resolve(email == u.email && password == u.password);
+      resolve(true);
     });
   }
 
@@ -140,8 +146,12 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   getTransactionHistory(): Promise<Transaction[]> {
-    let rst = this.db.executeSql("SELECT * FROM transaction",{});
-    return undefined;
+    let rst = this.db.executeSql("SELECT * FROM transactions", {})
+      .then(value => {
+        console.log(value);
+        console.log(JSON.stringify(value));
+      });
+    return new Promise<Transaction[]>(resolve => resolve([]));
   }
 
   getBills(): Promise<any> {
@@ -157,11 +167,11 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   db: SQLiteObject;
-  accountInfo: userInfo;
+  accountInfo: UserInfo;
 
   constructor(private platform: Platform, private sqlite: SQLite) {
     super();
-    let accountInfo = new userInfo(new Storage());
+    // let accountInfo = new UserInfo(this.storage);
     platform.ready().then(value => {
       console.log(value);
       sqlite.create({
@@ -218,14 +228,13 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
           '  type        TEXT,\n' +
           '  CONSTRAINT acc FOREIGN KEY (account) REFERENCES account (id)\n' +
           '    ON DELETE SET NULL\n' +
-          '    ON UPDATE CASCADE\n' +
+          '    ON UPDATE CASCADE,\n' +
           '    CONSTRAINT cat FOREIGN KEY (category) REFERENCES category(code) ON DELETE SET NULL ON UPDATE CASCADE\n' +
           ');', {}));
   }
 }
 
-@Injectable()
-export class userInfo {
+export class UserInfo {
 
   private names: string[];
   private emails: string[];
