@@ -196,10 +196,16 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   updateTransaction(id: number, transaction: Transaction = null): Promise<boolean> {
+    console.log(JSON.stringify(transaction));
+    console.log(id);
     let sql = "UPDATE transactions SET amount = ?, currency = ?, description = ?, account = ?, category = ?, type = ? WHERE id = ?;";
     return this.db.executeSql(sql, [transaction.amount, transaction.currency, transaction.description, transaction.account, transaction.category.id, transaction.type, id])
       .then(value => {
         return value.rowsAffected == 1;
+      }, reason => {
+        console.log(reason);
+        console.log(JSON.stringify(reason));
+        return false;
       });
   }
 
@@ -228,7 +234,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
           let d = new Date();
           d.setTime(item.date);
           let trans = new Transaction(
-            item.id, item.amount, item.currency, d, item.description, item.account, item.code, item.name, item.type
+            item.id, item.amount, item.currency, d, item.description, item.account, item.name, item.code, item.type
           );
           t.push(trans);
         }
