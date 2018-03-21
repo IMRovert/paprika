@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS account(
   currency text),
 );
 
-CREATE TABLE IF NOT EXISTS bill(
+CREATE TABLE IF NOT EXISTS bill (
   date integer,
   payee text,
   amount numeric(8,2),
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS category (
   name text
 );
 
-CREATE TABLE IF NOT EXISTS transaction (
+CREATE TABLE IF NOT EXISTS transactions (
   id int PRIMARY KEY AUTOINCREMENT,
   amount NUMERIC(5,2),
   currency text,

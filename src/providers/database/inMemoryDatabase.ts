@@ -78,11 +78,11 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     this.categories.push(new Category(5, "Food"));
     this.categories.push(new Category(6, "Extras"));
     this.transactions = [
-      new Transaction(0, 35, 'CAD', 20318, 'Bought two pizzas from the pizza store', 256037, 'Food', 5, 'withdrawal'),
-      new Transaction(1, 66, 'CAD', 180318, 'bought an overpriced iPhone charger', 256037, 'Extras', 6, 'withdrawal'),
-      new Transaction(2, 250, 'CAD', 60817, 'inheritance check', 256037, 'Income', 1, 'deposit'),
-      new Transaction(3, 650, 'CAD', 310118, 'payed rent', 678234, 'Housing', 2, 'withdrawal'),
-      new Transaction(4, 22.44, 'CAD', 40414, 'beer pong supplies', 678234, 'Extras', 6, 'withdrawal')];
+      new Transaction(0, 35, 'CAD', new Date(), 'Bought two pizzas from the pizza store', 256037, 'Food', 5, 'withdrawal'),
+      new Transaction(1, 66, 'CAD', new Date(), 'bought an overpriced iPhone charger', 256037, 'Extras', 6, 'withdrawal'),
+      new Transaction(2, 250, 'CAD', new Date(), 'inheritance check', 256037, 'Income', 1, 'deposit'),
+      new Transaction(3, 650, 'CAD', new Date(), 'payed rent', 678234, 'Housing', 2, 'withdrawal'),
+      new Transaction(4, 22.44, 'CAD', new Date(), 'beer pong supplies', 678234, 'Extras', 6, 'withdrawal')];
 
   }
 

@@ -4,7 +4,7 @@ import {Category} from "./category";
 export class Transaction {
   amount: number;
   currency: string;
-  date: number;
+  date: Date;
   description: string;
   account: number;
   category: Category;
@@ -12,7 +12,7 @@ export class Transaction {
   id: number;
 
 
-  constructor(id: number, amount: number, currency: string, date: number, description: string, account: number, categoryName: string, categoryNumber: number, type: string) {
+  constructor(id: number, amount: number, currency: string, date: Date, description: string, account: number, categoryName: string, categoryNumber: number, type: string) {
     this.id = id;
     this.amount = amount;
     this.currency = currency;

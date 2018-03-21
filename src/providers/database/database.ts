@@ -61,26 +61,66 @@ export abstract class DatabaseProvider {
 export class SQLiteDatabaseProvider extends DatabaseProvider {
 
   getCategoryChartData(startDate: Date, endDate: Date): Promise<Array<{ name: string; amount: number }>> {
-    return undefined;
+    return new Promise<Array<{ name: string, amount: number }>>(resolve => resolve([]));
   }
 
   getSpendingChartData(startDate: Date, endDate: Date): Promise<Array<{ date: Date; amount: number }>> {
-    return undefined;
+    let sql = "SELECT SUM(amount) as total, datetime(date, 'unixepoch', 'start of day') as day FROM transactions WHERE date <= ? and date >= ? GROUP BY day;";
+    if (!startDate || !endDate || endDate.getTime() < startDate.getTime()) {
+      return new Promise<Array<{ date: Date, amount: number }>>(resolve => resolve([]));
+    }
+
+    return this.db.executeSql(sql, [startDate.getTime(), endDate.getTime()])
+      .then(value => {
+        let result = [];
+        for (let i = 0; i < value.rows.length; i++) {
+          let item = value.rows.item(i);
+          let d = new Date(item.day);
+          result.push({date: d, amount: item.amount});
+        }
+        console.log(result);
+        console.log(JSON.stringify(result));
+        return result;
+      }, reason => {
+        console.log(reason);
+        return reason;
+      });
+
   }
 
+  /**
+   * Gets the catagories from the database.
+   * @returns {Promise<Category[]>}
+   */
   getCategories(): Promise<Category[]> {
     return this.db.executeSql("SELECT code, name FROM category;", [])
       .then(value => {
-        console.log(value);
-        return new Promise<Category[]>(resolve => {
-          let c = Array<Category>();
-          resolve(c);
-        });
-      })
+        let c = Array<Category>();
+        for (let i = 0; i < value.rows.length; i++) {
+          let item = value.rows.item(i);
+          c.push(new Category(item.code, item.name));
+        }
+        return c;
+      }, reason => {
+        console.log(reason);
+        return reason;
+      });
   }
 
+  /**
+   * Inserts a category into the database.
+   * @param {string} name
+   * @returns {Promise<boolean>}
+   */
   addCategory(name: string): Promise<boolean> {
-    return undefined;
+    let sql = "INSERT INTO category (name) VALUES (?)";
+    return this.db.executeSql(sql, [name])
+      .then(value => {
+        return value.rowsAffected == 1;
+      }, reason => {
+        console.log(reason);
+        return false;
+      })
   }
 
   createUser(user: User): Promise<User> {
@@ -126,7 +166,15 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   addTransaction(transaction: Transaction): Promise<boolean> {
-    return undefined;
+    let sql = "INSERT INTO transactions (amount, currency, date, description, account, category, type) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    return this.db.executeSql(sql, [transaction.amount, transaction.currency, transaction.date.getTime(), transaction.description, transaction.amount, transaction.category.id, transaction.type])
+      .then(value => {
+        console.log(JSON.stringify(value));
+        return new Promise<boolean>(resolve => resolve(value.rowsAffected == 1));
+      }, reason => {
+        console.log(reason);
+        return reason;
+      });
   }
 
   addBill(bill: object): Promise<any> {
@@ -134,7 +182,11 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   updateTransaction(id: number, transaction: Transaction = null): Promise<boolean> {
-    return undefined;
+    let sql = "UPDATE transactions SET amount = ?, currency = ?, description = ?, account = ?, category = ?, type = ? WHERE id = ?;";
+    return this.db.executeSql(sql, [transaction.amount, transaction.currency, transaction.description, transaction.account, transaction.category.id, transaction.type, id])
+      .then(value => {
+        return value.rowsAffected == 1;
+      });
   }
 
   updateBill(): Promise<any> {
@@ -145,13 +197,29 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     return undefined;
   }
 
+  /**
+   * Gets the transactions in the database.
+   * @returns {Promise<Transaction[]>}
+   */
   getTransactionHistory(): Promise<Transaction[]> {
-    let rst = this.db.executeSql("SELECT * FROM transactions", {})
+    let sql = "SELECT id, amount, currency, date, description, account, type, code, name FROM transactions JOIN category c ON transactions.category = c.code ORDER BY date DESC;";
+    return this.db.executeSql(sql, {})
       .then(value => {
         console.log(value);
         console.log(JSON.stringify(value));
+        let t = [];
+        for (let i = 0; i < value.rows.length; i++) {
+          let item = value.rows.item(i);
+          let d = new Date();
+          d.setTime(item.date);
+          let trans = new Transaction(
+            item.id, item.amount, item.currency, d, item.description, item.account, item.code, item.name, item.type
+          );
+          t.push(trans);
+        }
+        console.log(JSON.stringify(t));
+        return t;
       });
-    return new Promise<Transaction[]>(resolve => resolve([]));
   }
 
   getBills(): Promise<any> {

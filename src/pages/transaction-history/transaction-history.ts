@@ -19,13 +19,16 @@ export class TransactionHistoryPage implements OnInit {
     this.transList = [];
   }
 
-  ngOnInit(): void {
+  ionViewWillEnter(): void {
     this.db.getTransactionHistory().then(value => {
       console.log(value);
       this.transList = value;
     }).catch(reason => {
       console.log(reason);
     });
+  }
+
+  ngOnInit(): void {
   }
 
   itemTapped($event, item: Transaction) {

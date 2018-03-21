@@ -32,7 +32,7 @@ export class EditTransactionPage {
       this.edit = true;
     } else {
       this.title = "Add Transaction";
-      this.transaction = new Transaction(0, 0, "CDN", new Date().getDate(), "", 0, "", 0, "withdrawal");
+      this.transaction = new Transaction(0, 0, "CDN", new Date(), "", 0, "", 0, "withdrawal");
     }
 
   }
