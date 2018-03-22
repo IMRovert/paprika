@@ -13,10 +13,11 @@ import {DatabaseProvider} from "../../providers/database/database";
 export class TransactionHistoryPage implements OnInit {
   icons: string[];
   transList: Transaction[];
+  accList: Account[];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private db: DatabaseProvider) {
-    this.icons = ['log-in', 'log-out'];
     this.transList = [];
+    this.accList = [];
   }
 
   ionViewWillEnter(): void {
@@ -26,6 +27,11 @@ export class TransactionHistoryPage implements OnInit {
     }).catch(reason => {
       console.log(reason);
     });
+    this.db.getAccounts().then(value => {
+      console.log(value);
+      this.accList = value;
+    });
+
   }
 
   ngOnInit(): void {
