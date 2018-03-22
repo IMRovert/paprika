@@ -188,13 +188,30 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
 
   addTransaction(transaction: Transaction): Promise<boolean> {
     let sql = "INSERT INTO transactions (amount, currency, date, description, account, category, type) VALUES (?, ?, ?, ?, ?, ?, ?);";
-    return this.db.executeSql(sql, [transaction.amount, transaction.currency, transaction.date.getTime(), transaction.description, transaction.amount, transaction.category.id, transaction.type])
+    let getBalance = "SELECT balance FROM account WHERE id = ?";
+    let updateBalance = "UPDATE account SET balance = ? WHERE id = ?";
+
+    console.log(JSON.stringify(transaction));
+
+    if (transaction.account == null || transaction.category == null) {
+      return new Promise<boolean>(resolve => resolve(false));
+    }
+
+    return this.db.executeSql(sql, [transaction.amount, transaction.currency, transaction.date.getTime(), transaction.description, transaction.account, transaction.category.id, transaction.type])
       .then(value => {
         console.log(JSON.stringify(value));
-        return new Promise<boolean>(resolve => resolve(value.rowsAffected == 1));
-      }, reason => {
-        console.log(reason);
-        return reason;
+        return this.db.executeSql(getBalance, [transaction.account]);
+      }).then(value => {
+        let b = value.rows.item(0).balance;
+        b = b + transaction.amount;
+        return this.db.executeSql(updateBalance, [b, transaction.account]);
+      })
+      .then(value => {
+        return value.rowsAffected == 1;
+      })
+      .catch(reason => {
+        console.log(JSON.stringify(reason));
+        return false;
       });
   }
 
@@ -227,19 +244,23 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
    * @returns {Promise<Transaction[]>}
    */
   getTransactionHistory(): Promise<Transaction[]> {
-    let sql = "SELECT id, amount, currency, date, description, account, type, code, name FROM transactions JOIN category c ON transactions.category = c.code ORDER BY date DESC;";
+    let sql = "SELECT t.id, amount, t.currency as currency, date, description, account, t.type as type, code, c.name as catName, a.name as acctName FROM transactions t JOIN category c ON t.category = c.code LEFT OUTER JOIN account a ON a.id = t.account ORDER BY date DESC;";
     return this.db.executeSql(sql, {})
       .then(value => {
+        console.log(JSON.stringify(value));
         let t = [];
         for (let i = 0; i < value.rows.length; i++) {
           let item = value.rows.item(i);
+          console.log(JSON.stringify(item));
           let d = new Date();
           d.setTime(item.date);
           let trans = new Transaction(
-            item.id, item.amount, item.currency, d, item.description, item.account, item.name, item.code, item.type
+            item.id, item.amount, item.currency, d, item.description, item.account, item.catName, item.code, item.type
           );
+          trans.accountName = item.acctName;
           t.push(trans);
         }
+        console.log(JSON.stringify(t));
         return t;
       });
   }

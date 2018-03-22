@@ -10,6 +10,7 @@ export class Transaction {
   category: Category;
   type: string;
   id: number;
+  accountName: string;
 
 
   constructor(id: number, amount: number, currency: string, date: Date, description: string, account: number, categoryName: string, categoryNumber: number, type: string) {

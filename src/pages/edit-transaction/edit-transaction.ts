@@ -3,6 +3,7 @@ import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angula
 import {DatabaseProvider} from "../../providers/database/database";
 import {Category} from "../../models/category";
 import {Transaction} from "../../models/transaction";
+import {Account} from "../../models/account";
 
 /**
  * Generated class for the EditTransactionPage page.
@@ -22,6 +23,10 @@ export class EditTransactionPage {
   transaction: Transaction;
   title = "Add Transaction";
   edit = false;
+  accounts: Account[];
+  amount = 0;
+
+  withdraw = '1';
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private db: DatabaseProvider, private alertCtrl: AlertController) {
     let transaction = navParams.get("transaction");
@@ -30,6 +35,7 @@ export class EditTransactionPage {
       this.transaction = transaction;
       this.title = "Edit Transaction";
       this.edit = true;
+      this.amount = Math.abs(transaction.amount);
     } else {
       this.title = "Add Transaction";
       this.transaction = new Transaction(0, 0, "CDN", new Date(), "", 0, "", 0, "withdrawal");
@@ -40,6 +46,9 @@ export class EditTransactionPage {
   ionViewDidLoad() {
     this.getCategories();
     console.log('ionViewDidLoad EditTransactionPage');
+    this.db.getAccounts().then(value => {
+      this.accounts = value;
+    })
   }
 
   private getCategories() {
@@ -82,6 +91,11 @@ export class EditTransactionPage {
 
 
   save() {
+    if (this.withdraw == '1') {
+      this.transaction.amount = Math.abs(this.amount) * -1;
+    } else {
+      this.transaction.amount = Math.abs(this.amount);
+    }
     if (this.edit) {
       this.db.updateTransaction(this.transaction.id, this.transaction).then(value => {
         if (value) {
