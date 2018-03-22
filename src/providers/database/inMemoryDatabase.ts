@@ -49,10 +49,10 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     );
   }
 
-  createUser(user: User): Promise<User> {
-    return new Promise<User>(resolve => {
+  createUser(user: User): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
       this.user = user;
-      resolve(this.user);
+      resolve(true);
     });
   }
 
@@ -105,7 +105,7 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     })
   }
 
-  getUser(): Promise<User> {
+  getUser(): Promise<User | null> {
     return new Promise<User>(resolve => {
       resolve(this.user);
     });

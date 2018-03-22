@@ -4,6 +4,7 @@ import {Transaction} from "../../models/transaction";
 import {Category} from "../../models/category";
 import {SQLite, SQLiteObject} from "@ionic-native/sqlite";
 import {Platform} from "ionic-angular";
+import {Storage} from "@ionic/storage";
 
 /*
   Generated class for the SQLiteDatabaseProvider provider.
@@ -19,11 +20,11 @@ export abstract class DatabaseProvider {
 
   abstract verifyCredentials(name: string, password: string): Promise<boolean>;
 
-  abstract createUser(user: User): Promise<User>;
+  abstract createUser(user: User): Promise<boolean>;
 
   abstract resetPassword(password: string): Promise<any>;
 
-  abstract getUser(): Promise<User>;
+  abstract getUser(): Promise<User | null>;
 
   abstract getAccounts(): Promise<any>;
 
@@ -68,9 +69,6 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
         let item = value.rows.item(i);
         result.push({name: item.name, amount: item.total});
       }
-      console.log("Graph results");
-      console.log(result);
-      console.log(JSON.stringify(result));
       return result;
     });
   }
@@ -92,8 +90,6 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
           result.push({date: d, amount: item.total});
         }
         console.log("Graph results");
-        console.log(result);
-        console.log(JSON.stringify(result));
         return result;
       }, reason => {
         console.log(reason);
@@ -137,19 +133,18 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
       })
   }
 
-  createUser(user: User): Promise<User> {
-    return this.accountInfo.overwriteUser(user);
+  createUser(user: User): Promise<boolean> {
+    return this.storage.ready().then(value => {
+      return this.storage.set("user", user);
+    })
   }
 
-  getUser(): Promise<User> {
-    return new Promise<User>(resolve => {
-      let u = new User("Matt", "password", "matt@mr.bla");
-      resolve(u);
+  getUser(): Promise<User | null> {
+    return this.storage.ready().then(value => {
+      return this.storage.get("user").then(value2 => {
+        return value2;
+      })
     });
-    /*return new Promise<User>(resolve => {
-      resolve(this.accountInfo.getUser());
-    });
-    */
   }
 
   resetPassword(password: string): Promise<any> {
@@ -166,8 +161,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
 
   verifyCredentials(email: string, password: string): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      let u = this.accountInfo.getUser();
-      resolve(true);
+      resolve(false);
     });
   }
 
@@ -196,8 +190,6 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   updateTransaction(id: number, transaction: Transaction = null): Promise<boolean> {
-    console.log(JSON.stringify(transaction));
-    console.log(id);
     let sql = "UPDATE transactions SET amount = ?, currency = ?, description = ?, account = ?, category = ?, type = ? WHERE id = ?;";
     return this.db.executeSql(sql, [transaction.amount, transaction.currency, transaction.description, transaction.account, transaction.category.id, transaction.type, id])
       .then(value => {
@@ -225,12 +217,9 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     let sql = "SELECT id, amount, currency, date, description, account, type, code, name FROM transactions JOIN category c ON transactions.category = c.code ORDER BY date DESC;";
     return this.db.executeSql(sql, {})
       .then(value => {
-        console.log(value);
-        console.log(JSON.stringify(value));
         let t = [];
         for (let i = 0; i < value.rows.length; i++) {
           let item = value.rows.item(i);
-          console.log(JSON.stringify(item));
           let d = new Date();
           d.setTime(item.date);
           let trans = new Transaction(
@@ -238,7 +227,6 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
           );
           t.push(trans);
         }
-        console.log(JSON.stringify(t));
         return t;
       });
   }
@@ -256,12 +244,11 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   db: SQLiteObject;
-  accountInfo: UserInfo;
 
-  constructor(private platform: Platform, private sqlite: SQLite) {
+  constructor(private platform: Platform, private sqlite: SQLite, private storage: Storage) {
     super();
-    // let accountInfo = new UserInfo(this.storage);
     platform.ready().then(value => {
+      // this.accountInfo = new UserInfo(this.storage);
       console.log(value);
       sqlite.create({
         name: 'data.db',
@@ -274,9 +261,6 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
         console.log("DB ERROR: " + reason);
       })
     });
-
-    console.log('Hello SQLiteDatabaseProvider Provider');
-
   }
 
   private createTables(dbobj) {
@@ -322,35 +306,3 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
           ');', {}));
   }
 }
-
-export class UserInfo {
-
-  private names: string[];
-  private emails: string[];
-  private passwords: string[];
-
-  constructor(private storage: Storage) {
-    storage.setItem("name", "");
-    storage.setItem("email", "");
-    storage.setItem("password", "");
-  }
-
-  overwriteUser(user: User): Promise<User> {
-    return new Promise<User>(resolve => {
-      this.names.push(this.storage.getItem("name"));
-      this.emails.push(this.storage.getItem("email"));
-      this.passwords.push(this.storage.getItem("password"));
-
-      this.storage.setItem("name", user.name);
-      this.storage.setItem("email", user.email);
-      this.storage.setItem("password", user.password);
-      resolve(user);
-    });
-  }
-
-  getUser(): User {
-    return new User(this.storage.getItem("name"), this.storage.getItem("password"), this.storage.getItem("email"));
-  }
-
-}
-
