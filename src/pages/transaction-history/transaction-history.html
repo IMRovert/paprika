@@ -8,8 +8,10 @@
 </ion-header>
 
 <ion-content>
-  <ion-fab right bottom>
-    <button ion-fab (click)="addTransaction()"><ion-icon name="add"></ion-icon></button>
+  <ion-fab right bottom *ngIf="accList.length > 0">
+    <button ion-fab (click)="addTransaction()">
+      <ion-icon name="add"></ion-icon>
+    </button>
   </ion-fab>
 
   <ion-card>
@@ -19,29 +21,33 @@
 
     <ion-list *ngIf="accList.length > 0">
       <ion-item *ngFor="let acc of accList">
-        <ion-icon [name] ="acc.type === 'checking' ? 'cash' : 'card'" item-start=""></ion-icon>
-        <h2>{{acc.type}} : {{acc.balance}}</h2>
+        <ion-icon [name]="acc.type === 'checking' ? 'cash' : 'card'" item-start=""></ion-icon>
+        <h2>{{acc.id}}: {{acc.name}} : {{acc.balance | currency}}</h2>
+        <p>{{acc.type}}</p>
       </ion-item>
     </ion-list>
+
+    <button ion-button (click)="addAccount()" block large color="primary">Add An Account
+    </button>
+
   </ion-card>
 
   <ion-card>
     <ion-card-header>
       Transaction History
     </ion-card-header>
-  <ion-list *ngIf="transList.length > 0">
-    <button ion-item *ngFor="let trans of transList" (click)="itemTapped($event, trans)">
-      <ion-icon [name]="trans.type === 'deposit' ? 'add' : 'remove'" item-start></ion-icon>
-      <h3>{{ trans.amount}} {{trans.account}}</h3>
-      <p>{{trans.description}}</p>
-      <ion-note item-end *ngIf="trans.category">
-        {{trans.category.name}}
-      </ion-note>
-      <ion-note item-end>{{trans.date}}</ion-note>
-    </button>
-  </ion-list>
+    <ion-list *ngIf="transList.length > 0">
+      <ion-item *ngFor="let trans of transList" (click)="itemTapped($event, trans)">
+        <ion-icon [name]="trans.amount > 0 ? 'add' : 'remove'" item-start></ion-icon>
+        <h3>{{trans.accountName}}: {{ trans.amount | currency}}</h3>
+        <p>{{trans.description}}</p>
+        <ion-note item-end *ngIf="trans.category">
+          {{trans.category.name}}
+        </ion-note>
+        <ion-note item-end>{{trans.date | date}}</ion-note>
+      </ion-item>
+    </ion-list>
   </ion-card>
-
 
 
   <ion-card>
