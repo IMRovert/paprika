@@ -12,38 +12,41 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-label>Account</ion-label>
-  <ion-list radio-group>
-    <ion-item>
-      <ion-label>Chequing</ion-label>
-      <ion-radio value="Chequing"></ion-radio>
-    </ion-item>
-    <ion-item>
-      <ion-label>Savings</ion-label>
-      <ion-radio value="Savings"></ion-radio>
-    </ion-item>
-  </ion-list>
-  <ion-label>Transaction Type</ion-label>
-  <ion-list radio-group [(ngModel)]="transaction.type">
-    <ion-item>
-      <ion-label>Deposit</ion-label>
-      <ion-radio value="deposit"></ion-radio>
-    </ion-item>
-    <ion-item>
-      <ion-label>Withdrawal</ion-label>
-      <ion-radio value="withdrawal"></ion-radio>
-    </ion-item>
-  </ion-list>
-  <ion-list>
-    <ion-item>
-      <ion-label floating>Description</ion-label>
-      <ion-textarea [(ngModel)]="transaction.description"></ion-textarea>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Amount</ion-label>
-      <ion-input type="number" [(ngModel)]="transaction.amount"></ion-input>
-    </ion-item>
-  </ion-list>
+  <div *ngIf="edit">
+    <p>Account: {{transaction.accountName}}</p>
+    <p>Amount: {{transaction.amount | currency}}</p>
+  </div>
+  <div *ngIf="!edit">
+    <ion-label>Account</ion-label>
+    <ion-list radio-group [(ngModel)]="transaction.account">
+      <ion-item *ngFor="let a of accounts">
+        <ion-label>{{a.name}}</ion-label>
+        <ion-radio [value]="a.id"></ion-radio>
+      </ion-item>
+    </ion-list>
+
+    <ion-label>Transaction Type</ion-label>
+    <ion-list radio-group [(ngModel)]="withdraw">
+      <ion-item>
+        <ion-label>Deposit</ion-label>
+        <ion-radio value="0"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>Withdraw</ion-label>
+        <ion-radio value="1"></ion-radio>
+      </ion-item>
+    </ion-list>
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Description</ion-label>
+        <ion-textarea [(ngModel)]="transaction.description"></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Amount</ion-label>
+        <ion-input type="number" [(ngModel)]="amount"></ion-input>
+      </ion-item>
+    </ion-list>
+  </div>
   <ion-grid>
     <ion-row>
       <ion-col>

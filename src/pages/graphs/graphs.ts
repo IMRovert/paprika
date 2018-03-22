@@ -49,6 +49,7 @@ export class GraphsPage {
   openCalendar() {
     const options: CalendarModalOptions = {
       pickMode: 'range',
+      canBackwardsSelected: true,
       title: 'Select a date range'
     };
 
