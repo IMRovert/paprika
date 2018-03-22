@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
-
+import {Account} from "../../models/account";
 import {Transaction} from "../../models/transaction";
 import {DatabaseProvider} from "../../providers/database/database";
 
@@ -45,5 +45,9 @@ export class TransactionHistoryPage implements OnInit {
 
   addTransaction() {
     this.navCtrl.push('EditTransactionPage');
+  }
+
+  addAccount() {
+    this.navCtrl.push('AddAccountPage').catch(reason => console.log(reason));
   }
 }

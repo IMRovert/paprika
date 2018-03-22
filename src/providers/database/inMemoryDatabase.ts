@@ -66,7 +66,7 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     super();
     console.log('Hello InMemoryDatabaseProvider Provider');
     this.user = new User("Mr. Bla", "password", "matt@mr.bla");
-    this.account = new Account(1, "Grand Spoons", "IBM", "sav", 69.69, "CAD");
+    this.account = new Account(1, "sav", 69.69, "CAD", "My Account");
     this.accounts = [];
     this.accounts.push(this.account);
     this.categories = Array();

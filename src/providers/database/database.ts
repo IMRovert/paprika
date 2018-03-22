@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {User} from "../../models/user";
+import {Account} from "../../models/account";
 import {Transaction} from "../../models/transaction";
 import {Category} from "../../models/category";
 import {SQLite, SQLiteObject} from "@ionic-native/sqlite";
@@ -165,12 +166,24 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     });
   }
 
-  getAccounts(): Promise<any> {
-    return undefined;
+  getAccounts(): Promise<Account[]> {
+    return this.db.executeSql("SELECT * FROM account", []).then(value => {
+      let ac = Array();
+      for (let i = 0; i < value.rows.length; i++) {
+        let row = value.rows.item(i);
+        let a = new Account(row.id, row.type, row.balance, row.currency, row.name);
+        ac.push(a);
+      }
+      return ac;
+    });
   }
 
-  addAccount(user: object, account: Account): Promise<any> {
-    return undefined;
+  addAccount(user: object, account: Account): Promise<boolean> {
+    let sql = "INSERT INTO account(type, balance, name) VALUES (?, ?, ?)";
+    return this.db.executeSql(sql, [account.type, account.balance, account.name])
+      .then(value => {
+        return value.rowsAffected == 1;
+      });
   }
 
   addTransaction(transaction: Transaction): Promise<boolean> {
@@ -267,8 +280,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     return dbobj.executeSql(
       'CREATE TABLE IF NOT EXISTS account (\n' +
       '  id       INTEGER PRIMARY KEY,\n' +
-      '  branch   TEXT,\n' +
-      '  bank     TEXT,\n' +
+      '  name   TEXT,\n' +
       '  type     TEXT,\n' +
       '  balance numeric(8,2),\n' +
       '  currency TEXT\n' +
