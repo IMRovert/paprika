@@ -9,38 +9,38 @@
 
 <ion-content class="main-background">
   <ion-fab right bottom *ngIf="accList.length > 0">
-    <button ion-fab (click)="addTransaction()" color="gold">
+    <button ion-fab (click)="addTransaction()" color="primary">
       <ion-icon name="add"></ion-icon>
     </button>
   </ion-fab>
 
-  <ion-card color="primary">
+  <ion-card>
     <ion-card-header>
       Accounts
     </ion-card-header>
 
     <ion-list *ngIf="accList.length > 0">
-      <ion-item *ngFor="let acc of accList" color="dark">
+      <ion-item *ngFor="let acc of accList">
         <ion-icon [name]="acc.type === 'checking' ? 'cash' : 'card'" item-start=""></ion-icon>
-        <h2>{{'' + acc.id + acc.name + (acc.balance | currency)}}</h2>
+        <h2>{{acc.name }} : {{(acc.balance | currency)}}</h2>
         <p>{{acc.type}}</p>
       </ion-item>
     </ion-list>
 
-    <button ion-button (click)="addAccount()" block large color="primary">Add An Account
+    <button ion-button (click)="addAccount()" clear block large color="primary">Add An Account
     </button>
 
   </ion-card>
 
-  <ion-card color="primary">
+  <ion-card>
     <ion-card-header>
       Transaction History
     </ion-card-header>
   <ion-list *ngIf="transList.length > 0">
-    <button ion-item *ngFor="let trans of transList" (click)="itemTapped($event, trans)" color="dark">
+    <button ion-item *ngFor="let trans of transList" (click)="itemTapped($event, trans)">
       <ion-icon [name]="trans.amount > 0 ? 'add' : 'remove'" item-start></ion-icon>
       <h2 ion-text>
-        {{(trans.accountName) + '\t' + (trans.amount | currency)}}
+        {{(trans.accountName)}} & {{(trans.amount | currency)}}
       </h2>
       <p>{{trans.description}}</p>
       <ion-note item-end *ngIf="trans.category">
@@ -48,11 +48,12 @@
       </ion-note>
       <ion-note item-end>{{trans.date | date}}</ion-note>
     </button>
+  </ion-list>
   </ion-card>
 
 
 
-  <ion-card color="primary">
+  <ion-card>
     <img src="assets/imgs/sample ad.png"/>
     <ion-card-content>
       <ion-card-title>
@@ -60,3 +61,4 @@
       </ion-card-title>
     </ion-card-content>
   </ion-card>
+</ion-content>
