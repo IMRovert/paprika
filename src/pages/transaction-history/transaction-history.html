@@ -22,12 +22,12 @@
     <ion-list *ngIf="accList.length > 0">
       <ion-item *ngFor="let acc of accList">
         <ion-icon [name]="acc.type === 'checking' ? 'cash' : 'card'" item-start=""></ion-icon>
-        <h2>{{acc.id}}: {{acc.name}} : {{acc.balance | currency}}</h2>
+        <h2>{{acc.name }} : {{(acc.balance | currency)}}</h2>
         <p>{{acc.type}}</p>
       </ion-item>
     </ion-list>
 
-    <button ion-button (click)="addAccount()" block large color="primary">Add An Account
+    <button ion-button (click)="addAccount()" clear block large color="primary">Add An Account
     </button>
 
   </ion-card>
@@ -50,6 +50,7 @@
   </ion-card>
 
 
+
   <ion-card>
     <img src="assets/imgs/sample ad.png"/>
     <ion-card-content>
@@ -58,3 +59,4 @@
       </ion-card-title>
     </ion-card-content>
   </ion-card>
+</ion-content>
