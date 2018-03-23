@@ -70,6 +70,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
         let item = value.rows.item(i);
         result.push({name: item.name, amount: item.total});
       }
+      console.log(JSON.stringify(result));
       return result;
     });
   }

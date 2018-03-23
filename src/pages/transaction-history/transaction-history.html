@@ -40,7 +40,7 @@
     <button ion-item *ngFor="let trans of transList" (click)="itemTapped($event, trans)">
       <ion-icon [name]="trans.amount > 0 ? 'add' : 'remove'" item-start></ion-icon>
       <h2 ion-text>
-        {{(trans.accountName)}} & {{(trans.amount | currency)}}
+        {{(trans.accountName)}} : {{(trans.amount | currency)}}
       </h2>
       <p>{{trans.description}}</p>
       <ion-note item-end *ngIf="trans.category">
