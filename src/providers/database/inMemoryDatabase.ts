@@ -4,12 +4,38 @@ import {User} from "../../models/user";
 import {Account} from "../../models/account";
 import {Transaction} from "../../models/transaction";
 import {Category} from "../../models/category";
+import moment from 'moment';
+import {Bill} from "../../models/bill";
 
 @Injectable()
 export class InMemoryDatabaseProvider extends DatabaseProvider {
 
   categories: Category[];
-  transactions: Transaction[];
+
+  getCategoryChartData(startDate: Date, endDate: Date): Promise<Array<{ name: string; amount: number }>> {
+    return new Promise<Array<{ name: string, amount: number }>>(resolve => {
+      let data = Array();
+      data.push({name: "Food", amount: 200});
+      data.push({name: "Gas", amount: 400});
+      data.push({name: "Entertainment", amount: 40});
+      data.push({name: "Student Loans", amount: 500});
+      resolve(data);
+    });
+  }
+
+
+  getSpendingChartData(startDate: Date, endDate: Date): Promise<Array<{ date: Date; amount: number }>> {
+    return new Promise<Array<{ date: Date, amount: number }>>(resolve => {
+      let data = Array<{ date: Date; amount: number }>();
+      let start = moment(startDate);
+      data.push({date: start.toDate(), amount: 200});
+      data.push({date: start.add(1, 'day').toDate(), amount: 400});
+      data.push({date: start.add(2, 'day').toDate(), amount: 250});
+      data.push({date: start.add(3, 'day').toDate(), amount: 0});
+      data.push({date: start.add(4, 'day').toDate(), amount: 10});
+      resolve(data);
+    });
+  }
 
   getCategories(): Promise<Category[]> {
     return new Promise<Category[]>(resolve => resolve(this.categories));
@@ -23,22 +49,24 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     );
   }
 
-  createUser(user: User): Promise<User> {
-    return new Promise<User>(resolve => {
+  createUser(user: User): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
       this.user = user;
-      resolve(this.user);
+      resolve(true);
     });
   }
 
   private user: User;
   private account: Account;
   private accounts: Account[];
+  private transactions: Transaction[];
+  private bills: Bill[];
 
   constructor() {
     super();
     console.log('Hello InMemoryDatabaseProvider Provider');
     this.user = new User("Mr. Bla", "password", "matt@mr.bla");
-    this.account = new Account(1, "Grand Spoons", "IBM", "sav", 69.69, "CAD");
+    this.account = new Account(1, "sav", 69.69, "CAD", "My Account");
     this.accounts = [];
     this.accounts.push(this.account);
     this.categories = Array();
@@ -50,11 +78,11 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     this.categories.push(new Category(5, "Food"));
     this.categories.push(new Category(6, "Extras"));
     this.transactions = [
-      new Transaction(0, 35, 'CAD', 20318, 'Bought two pizzas from the pizza store', 256037, 'Food', 5, 'withdrawal'),
-      new Transaction(1, 66, 'CAD', 180318, 'bought an overpriced iPhone charger', 256037, 'Extras', 6, 'withdrawal'),
-      new Transaction(2, 250, 'CAD', 60817, 'inheritance check', 256037, 'Income', 1, 'deposit'),
-      new Transaction(3, 650, 'CAD', 310118, 'payed rent', 678234, 'Housing', 2, 'withdrawal'),
-      new Transaction(4, 22.44, 'CAD', 40414, 'beer pong supplies', 678234, 'Extras', 6, 'withdrawal')];
+      new Transaction(0, 35, 'CAD', new Date(), 'Bought two pizzas from the pizza store', 256037, 'Food', 5, 'withdrawal'),
+      new Transaction(1, 66, 'CAD', new Date(), 'bought an overpriced iPhone charger', 256037, 'Extras', 6, 'withdrawal'),
+      new Transaction(2, 250, 'CAD', new Date(), 'inheritance check', 256037, 'Income', 1, 'deposit'),
+      new Transaction(3, 650, 'CAD', new Date(), 'payed rent', 678234, 'Housing', 2, 'withdrawal'),
+      new Transaction(4, 22.44, 'CAD', new Date(), 'beer pong supplies', 678234, 'Extras', 6, 'withdrawal')];
 
   }
 
@@ -77,7 +105,7 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     })
   }
 
-  getUser(): Promise<User> {
+  getUser(): Promise<User | null> {
     return new Promise<User>(resolve => {
       resolve(this.user);
     });
@@ -89,8 +117,11 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     });
   }
 
-  addAccount(user: object, account: object): Promise<any> {
-    return undefined;
+  addAccount(account: Account): Promise<boolean> {
+    this.accounts.push(account);
+    return new Promise<boolean>(resolve => {
+      resolve(true);
+    });
   }
 
   addTransaction(transaction: Transaction): Promise<boolean> {
@@ -101,8 +132,11 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
     });
   }
 
-  addBill(bill: object): Promise<any> {
-    return undefined;
+  addBill(bill: Bill): Promise<boolean> {
+    this.bills.push(bill);
+    return new Promise<boolean>(resolve => {
+      resolve(true);
+    });
   }
 
   updateTransaction(id: number, transaction: Transaction): Promise<boolean> {
@@ -131,10 +165,6 @@ export class InMemoryDatabaseProvider extends DatabaseProvider {
   }
 
   getBills(): Promise<any> {
-    return undefined;
-  }
-
-  getBalance(account: object): Promise<any> {
     return undefined;
   }
 

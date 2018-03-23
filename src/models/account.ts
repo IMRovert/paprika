@@ -1,17 +1,15 @@
 export class Account {
   id: number;
-  branch: string;
-  bank: string;
   type: string;
   balance: number;
   currency?: string;
+  name: string;
 
-  constructor(id: number, branch: string, bank: string, type: string, balance: number, currency: string) {
+  constructor(id: number, type: string, balance: number, currency: string, name: string) {
     this.id = id;
-    this.branch = branch;
-    this.bank = bank;
     this.type = type;
     this.balance = balance;
     this.currency = currency;
+    this.name = name;
   }
 }

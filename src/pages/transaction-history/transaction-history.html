@@ -3,26 +3,54 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Transaction History</ion-title>
+    <ion-title>Home</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-fab right bottom>
-    <button ion-fab (click)="addTransaction()"><ion-icon name="add"></ion-icon></button>
-  </ion-fab>
-  <ion-list *ngIf="transList.length > 0">
-    <button ion-item *ngFor="let trans of transList" (click)="itemTapped($event, trans)">
-      <ion-icon [name]="trans.type === 'deposit' ? 'log-in' : 'log-out'" item-left></ion-icon>
-      ${{ trans.amount}}
-      <div class="item-note" item-right *ngIf="trans.category">
-        {{trans.category.name}}
-      </div>
-      <div class="item-note">
-        {{trans.description}}
-      </div>
+  <ion-fab right bottom *ngIf="accList.length > 0">
+    <button ion-fab (click)="addTransaction()">
+      <ion-icon name="add"></ion-icon>
     </button>
-  </ion-list>
+  </ion-fab>
+
+  <ion-card>
+    <ion-card-header>
+      Accounts
+    </ion-card-header>
+
+    <ion-list *ngIf="accList.length > 0">
+      <ion-item *ngFor="let acc of accList">
+        <ion-icon [name]="acc.type === 'checking' ? 'cash' : 'card'" item-start=""></ion-icon>
+        <h2>{{acc.name }} : {{(acc.balance | currency)}}</h2>
+        <p>{{acc.type}}</p>
+      </ion-item>
+    </ion-list>
+
+    <button ion-button (click)="addAccount()" clear block large color="primary">Add An Account
+    </button>
+
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      Transaction History
+    </ion-card-header>
+    <ion-list *ngIf="transList.length > 0">
+      <ion-item *ngFor="let trans of transList" (click)="itemTapped($event, trans)">
+        <ion-icon [name]="trans.amount > 0 ? 'add' : 'remove'" item-start></ion-icon>
+        <h3>{{trans.accountName}}: {{ trans.amount | currency}}</h3>
+        <p>{{trans.description}}</p>
+        <ion-note item-end *ngIf="trans.category">
+          {{trans.category.name}}
+        </ion-note>
+        <ion-note item-end>{{trans.date | date}}</ion-note>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+
+
   <ion-card>
     <img src="assets/imgs/sample ad.png"/>
     <ion-card-content>

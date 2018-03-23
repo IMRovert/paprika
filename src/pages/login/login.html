@@ -16,7 +16,7 @@
   </div>
 </ion-content>
 <ion-footer padding class="red-background">
-  <form id="login-form1" [formGroup]="login" (ngSubmit)="signIn()">
+  <form id="login-form1" [formGroup]="login" (ngSubmit)="signIn()" *ngIf="(user |async) !== null">
     <ion-list id="login-list1">
       <ion-item>
         <ion-label floating>Email</ion-label>
@@ -27,7 +27,9 @@
         <ion-input type="password" formControlName="password"></ion-input>
       </ion-item>
     </ion-list>
+    <p>{{errorMessage}}</p>
     <button ion-button type="submit" color="dark" block large [disabled]="!login.valid">Log in</button>
   </form>
-  <button (click)="goToRegister()" color="secondary" ion-button block large outline>Or create an account</button>
+  <button *ngIf="(user |async) == null" (click)="goToRegister()" color="secondary" ion-button block large outline>Create an account
+  </button>
 </ion-footer>
