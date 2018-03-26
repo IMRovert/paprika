@@ -19,10 +19,12 @@
   <form [formGroup]="importFile" (ngSubmit)="readFile()">
     <ion-list>
       <ion-label>Account</ion-label>
-      <ion-item *ngFor="let a of accounts">
-        <ion-label>{{a.name}}</ion-label>
-        <ion-radio [value]="a.id"></ion-radio>
-      </ion-item>
+      <ion-list radio-group [(ngModel)]="accountid">
+        <ion-item *ngFor="let a of accounts">
+          <ion-label>{{a.name}}</ion-label>
+          <ion-radio [value]="a.id"></ion-radio>
+        </ion-item>
+      </ion-list>
       <ion-item>
         <ion-label>File Name</ion-label>
         <ion-input id="inputfile" type="text" formControlName="fileName" required></ion-input>
