@@ -32,7 +32,7 @@ export class ImportPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, public plat : Platform, private db: DatabaseProvider, private http : HTTP, private formBuilder: FormBuilder,  private alertCtrl: AlertController) {
 
     this.importFile = this.formBuilder.group({
-      accountname: ['', Validators.required],
+      //accountname: ['', Validators.required],
       fileName: ['', Validators.required]
     });
 
@@ -70,7 +70,7 @@ export class ImportPage {
     //console.log(this.importFile.value);
 
     let testdata;
-    this.http.get('ImportFiles/' + this.importFile.value.fileName + '.csv', {}, {}).then((data) => {
+    this.http.get('' + this.importFile.value.fileName + '.csv', {}, {}).then((data) => {
       //console.log(data);
       testdata = "" + data.data;
       console.log('Data successfully imported to Account:\nAccount Name: ' + this.importFile.value.accountname + ' Imported From File: ' + this.importFile.value.fileName)
@@ -128,7 +128,7 @@ export class ImportPage {
 
     }
     ).catch((err) => {console.log("File read error: " + err.toString());
-    alert("Error: The file specified does not exist")});
+    alert("Error: The file specified does not exist: " + JSON.stringify(err))});
 
 
 
