@@ -60,37 +60,6 @@ export class ImportPage {
     );
   }
 
-  addNewCategory() {
-    let alert = this.alertCtrl.create({
-      title: 'Add Category',
-      inputs: [
-        {
-          name: 'name',
-          placeholder: 'Category Name'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Add',
-          handler: data => {
-            if (data.name) {
-              this.db.addCategory(data.name).then(value => {
-                this.getCategories();
-              })
-            }
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
 
   compareCat(e1: Category, e2: Category) {
     return e1.id === e2.id;
@@ -152,7 +121,6 @@ export class ImportPage {
         message = message + lines[i];
         items = lines[i].split(",");
         let tuple = '';
-        for(var j = 0; j < items.length;j++) {
           //tuple = tuple + headers[j] + ": " + items[j] + ' ';
 
 
@@ -161,7 +129,7 @@ export class ImportPage {
 
           let catExists = false;
           for(var m = 0; m < this.categories.length; m++) {
-            if(this.categories[l].name == items[3]) {
+            if(this.categories[m].name == items[3]) {
               catExists = true;
 
             }
@@ -178,20 +146,23 @@ export class ImportPage {
         }
           for(var l = 0; l < this.categories.length; l++) {
             if(this.categories[l].name == items[3]) {
-              this.transaction.category
+              this.transaction.category = this.categories[l];
 
             }
 
-        this.transaction.category
 
-          this.db.addTransaction(this.transaction)
-        console.log(tuple);
-        //message = message + '\n' + tuple;
+            this.db.addTransaction(this.transaction).then(value => {
+              if (value) {
+                this.navCtrl.pop();
+              }
+            })
 
 
       }
-      alert(message);
-    }}}).catch((err) => {console.log("File read error: " + err.toString());
+      }
+
+    }
+    ).catch((err) => {console.log("File read error: " + err.toString());
     alert("Error: The file specified does not exist")});
 
 

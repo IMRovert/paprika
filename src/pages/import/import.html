@@ -18,10 +18,6 @@
   </div>
   <form [formGroup]="importFile" (ngSubmit)="readFile()">
     <ion-list>
-      <!-- <ion-item>
-        <<ion-label floating>Name of this Account</ion-label>
-        <ion-input id="accountname" type="text" formControlName="accountname" required></ion-input>
-      </ion-item> -->
       <ion-label>Account</ion-label>
       <ion-item *ngFor="let a of accounts">
         <ion-label>{{a.name}}</ion-label>
