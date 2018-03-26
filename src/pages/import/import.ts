@@ -1,8 +1,13 @@
 import { Component } from '@angular/core';
-import {IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
+import {Platform} from 'ionic-angular';
 import { File } from '@ionic-native/file';
 import { HTTP } from '@ionic-native/http';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Account} from "../../models/account";
+import {Transaction} from "../../models/transaction";
+import {DatabaseProvider} from "../../providers/database/database";
+import {Category} from "../../models/category";
+import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 
 /**
  * Generated class for the ImportPage page.
@@ -18,8 +23,12 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 })
 export class ImportPage {
   private importFile: FormGroup;
+  categories: Category[];
+  transaction: Transaction;
+  accounts: Account[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, public plat : Platform, private http : HTTP, private formBuilder: FormBuilder) {
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, public plat : Platform, private db: DatabaseProvider, private http : HTTP, private formBuilder: FormBuilder,  private alertCtrl: AlertController) {
 
    /* checkFile(path, file);
     createFile(path, file, false);
@@ -31,8 +40,6 @@ export class ImportPage {
 
     this.importFile = this.formBuilder.group({
       accountname: ['', Validators.required],
-      balance: ['', Validators.required],
-      currency: ['', Validators.required],
       fileName: ['', Validators.required]
     });
 
@@ -40,6 +47,53 @@ export class ImportPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ImportPage');
+    this.getCategories();
+
+    this.db.getAccounts().then(value => {
+      this.accounts = value;
+    })
+  }
+
+  private getCategories() {
+    this.db.getCategories().then(
+      value => this.categories = value
+    );
+  }
+
+  addNewCategory() {
+    let alert = this.alertCtrl.create({
+      title: 'Add Category',
+      inputs: [
+        {
+          name: 'name',
+          placeholder: 'Category Name'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Add',
+          handler: data => {
+            if (data.name) {
+              this.db.addCategory(data.name).then(value => {
+                this.getCategories();
+              })
+            }
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  compareCat(e1: Category, e2: Category) {
+    return e1.id === e2.id;
   }
 
   readFile() {
@@ -99,16 +153,45 @@ export class ImportPage {
         items = lines[i].split(",");
         let tuple = '';
         for(var j = 0; j < items.length;j++) {
-          tuple = tuple + headers[j] + ": " + items[j] + ' ';
+          //tuple = tuple + headers[j] + ": " + items[j] + ' ';
 
-        };
+
+
+          this.transaction = new Transaction(0, Number(items[0]), "CDN", new Date(), items[1], 0, items[2], 0, items[3]);
+
+          let catExists = false;
+          for(var m = 0; m < this.categories.length; m++) {
+            if(this.categories[l].name == items[3]) {
+              catExists = true;
+
+            }
+
+          }
+
+          if(catExists === false) {
+
+            this.db.addCategory(items[3]).then(value => {
+              this.getCategories();
+
+          })
+
+        }
+          for(var l = 0; l < this.categories.length; l++) {
+            if(this.categories[l].name == items[3]) {
+              this.transaction.category
+
+            }
+
+        this.transaction.category
+
+          this.db.addTransaction(this.transaction)
         console.log(tuple);
         //message = message + '\n' + tuple;
 
 
       }
       alert(message);
-    }).catch((err) => {console.log("File read error: " + err.toString());
+    }}}).catch((err) => {console.log("File read error: " + err.toString());
     alert("Error: The file specified does not exist")});
 
 
@@ -125,6 +208,7 @@ export class ImportPage {
       items = lines[i].split(",");
       for(var j = 0; j < items.length;j++) {
         console.log(headers[j] + ": " + items[j]);
+        this.transaction = new Transaction(0, 0, "CDN", new Date(), "", 0, "", 0, items[0]);
       };
 
 
