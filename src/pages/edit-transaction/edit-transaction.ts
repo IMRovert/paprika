@@ -4,6 +4,7 @@ import {DatabaseProvider} from "../../providers/database/database";
 import {Category} from "../../models/category";
 import {Transaction} from "../../models/transaction";
 import {Account} from "../../models/account";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 /**
  * Generated class for the EditTransactionPage page.
@@ -28,7 +29,9 @@ export class EditTransactionPage {
 
   withdraw = '1';
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private db: DatabaseProvider, private alertCtrl: AlertController) {
+  transactionForm: FormGroup;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private db: DatabaseProvider, private alertCtrl: AlertController, private fb: FormBuilder) {
     let transaction = navParams.get("transaction");
 
     if (transaction) {
@@ -38,9 +41,30 @@ export class EditTransactionPage {
       this.amount = Math.abs(transaction.amount);
     } else {
       this.title = "Add Transaction";
-      this.transaction = new Transaction(0, 0, "CDN", new Date(), "", 0, "", 0, "withdrawal");
+      this.transaction = new Transaction(0, 0, "CDN", new Date(), "", 1, "", null, "withdrawal");
     }
 
+    this.buildForm();
+
+  }
+
+  private buildForm() {
+    if (!this.edit) {
+      this.transactionForm = this.fb.group(
+        {
+          amount: this.fb.control(this.transaction.amount, Validators.required),
+          account: this.fb.control(this.transaction.account, Validators.required),
+          description: this.fb.control(this.transaction.description, Validators.required),
+          category: this.fb.control(this.transaction.category, Validators.required),
+          type: this.fb.control('0', Validators.required)
+        });
+    } else {
+      this.transactionForm = this.fb.group(
+        {
+          description: this.fb.control(this.transaction.description, Validators.required),
+          category: this.fb.control(this.transaction.category, Validators.required)
+        });
+    }
   }
 
   ionViewDidLoad() {
@@ -91,11 +115,17 @@ export class EditTransactionPage {
 
 
   save() {
-    if (this.withdraw == '1') {
-      this.transaction.amount = Math.abs(this.amount) * -1;
-    } else {
-      this.transaction.amount = Math.abs(this.amount);
+    if (!this.edit) {
+      if (this.transactionForm.controls['type'].value == '1') {
+        this.transaction.amount = Math.abs(this.transactionForm.controls['amount'].value) * -1;
+      } else {
+        this.transaction.amount = Math.abs(this.transactionForm.controls['amount'].value);
+      }
+      this.transaction.account = this.transactionForm.controls['account'].value;
     }
+    this.transaction.description = this.transactionForm.controls['description'].value;
+    this.transaction.category = this.transactionForm.controls['category'].value;
+
     if (this.edit) {
       this.db.updateTransaction(this.transaction.id, this.transaction).then(value => {
         if (value) {

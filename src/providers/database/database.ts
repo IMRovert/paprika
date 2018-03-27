@@ -63,7 +63,7 @@ export abstract class DatabaseProvider {
 export class SQLiteDatabaseProvider extends DatabaseProvider {
 
   getCategoryChartData(startDate: Date, endDate: Date): Promise<Array<{ name: string; amount: number }>> {
-    let sql = "SELECT SUM(amount) as total, name FROM transactions JOIN category ON transactions.category = category.code WHERE date <= ? and date >= ? GROUP BY name ;";
+    let sql = "SELECT SUM(amount) as total, name FROM transactions LEFT OUTER JOIN category ON transactions.category = category.code WHERE date <= ? and date >= ? GROUP BY name ;";
     return this.db.executeSql(sql, [endDate.getTime(), startDate.getTime()]).then(value => {
       let result = [];
       for (let i = 0; i < value.rows.length; i++) {
@@ -245,7 +245,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
    * @returns {Promise<Transaction[]>}
    */
   getTransactionHistory(): Promise<Transaction[]> {
-    let sql = "SELECT t.id, amount, t.currency as currency, date, description, account, t.type as type, code, c.name as catName, a.name as acctName FROM transactions t JOIN category c ON t.category = c.code LEFT OUTER JOIN account a ON a.id = t.account ORDER BY date DESC;";
+    let sql = "SELECT t.id, amount, t.currency as currency, date, description, account, t.type as type, code, c.name as catName, a.name as acctName FROM transactions t LEFT OUTER JOIN category c ON t.category = c.code LEFT OUTER JOIN account a ON a.id = t.account ORDER BY date DESC;";
     return this.db.executeSql(sql, {})
       .then(value => {
         console.log(JSON.stringify(value));
