@@ -9,6 +9,9 @@ import {DatabaseProvider} from "../../providers/database/database";
 import {Category} from "../../models/category";
 import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 
+import { FileChooser } from '@ionic-native/file-chooser';
+import { FilePath } from '@ionic-native/file-path';
+
 /**
  * Generated class for the ImportPage page.
  *
@@ -29,12 +32,13 @@ export class ImportPage {
   accountid = 0;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, public plat : Platform, private db: DatabaseProvider, private http : HTTP, private formBuilder: FormBuilder,  private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, public plat : Platform, private db: DatabaseProvider, private http : HTTP, private formBuilder: FormBuilder,  private alertCtrl: AlertController, private fch: FileChooser, private filePath: FilePath) {
 
     this.importFile = this.formBuilder.group({
       //accountname: ['', Validators.required],
       fileName: ['', Validators.required]
     });
+
 
   }
 
@@ -70,9 +74,17 @@ export class ImportPage {
     //console.log(this.importFile.value);
 
     let testdata;
-    this.http.get('' + this.importFile.value.fileName + '.csv', {}, {}).then((data) => {
+    let filechooserurl;
+
+    //this.file.createDir(this.file.dataDirectory, "TESTDIRECTORY", false);
+
+    this.fch.open().then(uri => {this.filePath.resolveNativePath(uri).then(url => {filechooserurl = url}).catch((err) => {console.log("File uri error: " + err.toString())})}).catch((err) => {console.log("File native path error: " + err.toString())});
+
+    this.file.readAsText('', filechooserurl).then((data) => {
+    //this.file.readAsText(this.file.dataDirectory, "ImportFiles/" + this.importFile.value.fileName + ".csv").then((data) => {
+
       //console.log(data);
-      testdata = "" + data.data;
+      testdata = data;
       console.log('Data successfully imported to Account:\nAccount Name: ' + this.importFile.value.accountname + ' Imported From File: ' + this.importFile.value.fileName)
       //message = message + 'Data successfully imported to Account:\nAccount Name: ' + this.importFile.value.accountname + '    Imported From File: ' + this.importFile.value.fileName;
 
