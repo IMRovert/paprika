@@ -76,11 +76,13 @@ export class ImportPage {
     let testdata;
     let filechooserurl;
 
-    //this.file.createDir(this.file.dataDirectory, "TESTDIRECTORY", false);
+    let datapath;
+    this.filePath.resolveNativePath(this.file.externalRootDirectory).then(resolved => {datapath = resolved});
+    this.file.createDir(datapath, "testdir", false).catch(err => {console.log(JSON.stringify(err))});
 
     this.fch.open().then(uri => {this.filePath.resolveNativePath(uri).then(url => {filechooserurl = url}).catch((err) => {console.log("File uri error: " + err.toString())})}).catch((err) => {console.log("File native path error: " + err.toString())});
 
-    this.file.readAsText('', filechooserurl).then((data) => {
+    this.file.readAsText(filechooserurl, "").then((data) => {
     //this.file.readAsText(this.file.dataDirectory, "ImportFiles/" + this.importFile.value.fileName + ".csv").then((data) => {
 
       //console.log(data);
