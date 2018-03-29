@@ -26,7 +26,7 @@ export class AddAccountPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private db: DatabaseProvider, private fb: FormBuilder) {
     this.account = new Account(0, "Savings", 0, 'CDN', "");
-    this.buildForm;
+    this.buildForm();
   }
 
   private buildForm(){
