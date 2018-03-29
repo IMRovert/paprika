@@ -5,7 +5,10 @@ import { ExportPage } from './export';
 import { File } from '@ionic-native/file';
 import { HTTP } from '@ionic-native/http';
 
-@NgModule({
+import { FileChooser } from '@ionic-native/file-chooser';
+import { FilePath } from '@ionic-native/file-path';
+
+  @NgModule({
   declarations: [
     ExportPage,
   ],
@@ -13,7 +16,7 @@ import { HTTP } from '@ionic-native/http';
     IonicPageModule.forChild(ExportPage),
   ],
   providers: [
-    File, HTTP
+    File, HTTP, FileChooser, FilePath
   ]
 })
 export class ImportPageModule {}

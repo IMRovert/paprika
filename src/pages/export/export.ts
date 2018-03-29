@@ -9,6 +9,9 @@ import {DatabaseProvider} from "../../providers/database/database";
 import {Category} from "../../models/category";
 import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 
+import { FileChooser } from '@ionic-native/file-chooser';
+import { FilePath } from '@ionic-native/file-path';
+
 /**
  * Generated class for the ImportPage page.
  *
@@ -26,14 +29,14 @@ export class ExportPage {
   transList: Transaction[];
   transaction: Transaction;
   accounts: Account[];
+  accountid: number;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, public plat : Platform, private db: DatabaseProvider, private http : HTTP, private formBuilder: FormBuilder,  private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, public plat : Platform, private db: DatabaseProvider, private http : HTTP, private formBuilder: FormBuilder,  private alertCtrl: AlertController, private fch: FileChooser, private filePath: FilePath) {
 
     this.transList = [];
 
     this.exportFile = this.formBuilder.group({
-      accountname: ['', Validators.required],
       fileName: ['', Validators.required]
     });
 
@@ -46,69 +49,31 @@ export class ExportPage {
       this.accounts = value;
     })
 
-    this.db.getTransactionHistory().then(value => {
-      console.log(value);
-      this.transList = value;
-    }).catch(reason => {
-      console.log(reason);
-    });
   }
 
 
 
   readFile() {
-    if(this.plat.is('android')) {
-      /* Use a fileChooser.open to get file, and assigne to file variable */
-    }
-    else if(this.plat.is('browser')) {
-      /* Get file from HTML form */
 
-    }
-    //console.log(this.importFile.value);
     let testdata;
-    this.http.get('ExportFiles/' + this.exportFile.value.fileName + '.csv', {}, {}).then((data) => {
-        //console.log(data);
-        testdata = "" + data.data;
-        let items = [""];
+    let filechooserurl;
 
+    this.db.exportData(this.accountid).then(transactions => {this.transList = transactions}).catch(err => {console.log("Error reading transactions from data base: " + JSON.stringify(err))});
+    testdata = "Amount,Description,Category,Type\n";
+    for(let i = 0; i < this.transList.length; i++) {
+      testdata = testdata + this.transList[i].amount + "," + this.transList[i].description + "," + this.transList[i].category.name + "," + this.transList[i].type + "\n";
 
-
-          this.transaction = new Transaction(0, Number(items[0]), "CDN", new Date(), items[1], 0, items[2], 0, items[3]);
-
-
-
-
-          }
-
-
-
-    ).catch((err) => {console.log("File read error: " + err.toString());
-      alert("Error: The file specified does not exist")});
-
-
-
-    /*let fileText = "Date,Amount,Payee,Desc\n09-12-24,550.0,Trevor,Making Bank Yo\n09-07-06,200.55,Russell,#Dolla";
-    let lines = testdata.split("\n");
-    let items = [""];
-    let headers = lines[0].split(",");
-    /*for(var k = 0;k < headers.length;k++) {
-      console.log(headers[k]);
     }
-    for(var i = 1; i < lines.length;i++) {
-      console.log(lines[i]);
-      items = lines[i].split(",");
-      for(var j = 0; j < items.length;j++) {
-        console.log(headers[j] + ": " + items[j]);
-        this.transaction = new Transaction(0, 0, "CDN", new Date(), "", 0, "", 0, items[0]);
-      };
 
+    console.log("Transactions exported to File: \n" + testdata);
 
-    }; */
-    /*Insert Items into database
-    * */
+    //this.fch.open().then(uri => {this.filePath.resolveNativePath(uri).then(url => {filechooserurl = url}).catch((err) => {console.log("File uri error: " + err.toString())})}).catch((err) => {console.log("File native path error: " + err.toString())});
 
+    this.file.createFile(this.file.externalRootDirectory, this.exportFile.value.fileName, false).catch((err) => {console.log("Error creating filename: " + JSON.stringify(err))});
 
+    this.file.writeExistingFile(this.file.externalRootDirectory, this.exportFile.value.fileName, testdata).catch(err => {console.log("Error writing to File: " + JSON.stringify(err))});
 
+    this.navCtrl.pop();
   }
 
 }
