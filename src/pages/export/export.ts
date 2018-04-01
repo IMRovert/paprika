@@ -56,7 +56,7 @@ export class ExportPage {
   readFile() {
 
     let testdata;
-    let filechooserurl;
+    //let filechooserurl;
 
     this.db.exportData(this.accountid).then(transactions => {this.transList = transactions}).catch(err => {console.log("Error reading transactions from data base: " + JSON.stringify(err))});
     testdata = "Amount,Description,Category,Type\n";
@@ -66,12 +66,13 @@ export class ExportPage {
     }
 
     console.log("Transactions exported to File: \n" + testdata);
+    alert("Transactions exported: " + testdata);
 
     //this.fch.open().then(uri => {this.filePath.resolveNativePath(uri).then(url => {filechooserurl = url}).catch((err) => {console.log("File uri error: " + err.toString())})}).catch((err) => {console.log("File native path error: " + err.toString())});
 
-    this.file.createFile(this.file.externalRootDirectory, this.exportFile.value.fileName, false).catch((err) => {console.log("Error creating filename: " + JSON.stringify(err))});
+    //this.file.createFile(this.file.externalRootDirectory, this.exportFile.value.fileName, false).catch((err) => {console.log("Error creating filename: " + JSON.stringify(err))});
 
-    this.file.writeExistingFile(this.file.externalRootDirectory, this.exportFile.value.fileName, testdata).catch(err => {console.log("Error writing to File: " + JSON.stringify(err))});
+    //this.file.writeExistingFile(this.file.externalRootDirectory, this.exportFile.value.fileName, testdata).catch(err => {console.log("Error writing to File: " + JSON.stringify(err))});
 
     this.navCtrl.pop();
   }

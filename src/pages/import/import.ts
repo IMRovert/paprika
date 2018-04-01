@@ -65,20 +65,23 @@ export class ImportPage {
   readFile() {
 
     let testdata;
-    let filechooserurl;
+    //let filechooserurl;
 
     //let datapath;
     //this.filePath.resolveNativePath(this.file.externalRootDirectory).then(resolved => {datapath = resolved});
-    this.file.createDir(this.file.externalRootDirectory, "testdir", false).catch(err => {console.log(JSON.stringify(err))});
+    //this.file.createDir(this.file.externalRootDirectory, "testdir", false).catch(err => {console.log(JSON.stringify(err))});
 
-    this.fch.open().then(uri => {this.filePath.resolveNativePath(uri).then(url => {filechooserurl = url}).catch((err) => {console.log("File native path resolve error: " + JSON.stringify(err))})}).catch((err) => {console.log("File uri error: " + JSON.stringify(err))});
+    //this.fch.open().then(uri => {this.filePath.resolveNativePath(uri).then(url => {filechooserurl = url}).catch((err) => {console.log("File native path resolve error: " + JSON.stringify(err))})}).catch((err) => {console.log("File uri error: " + JSON.stringify(err))});
 
-    this.file.readAsText(filechooserurl, "").then((data) => {
+    //this.file.readAsText(filechooserurl, "").then((data) => {
     //this.file.readAsText(this.file.dataDirectory, "ImportFiles/" + this.importFile.value.fileName + ".csv").then((data) => {
 
       //console.log(data);
-      testdata = data;
-      console.log('Data successfully imported to Account:\nAccount Name: ' + this.importFile.value.accountname + ' Imported From File: ' + this.importFile.value.fileName)
+      testdata = "Amount,Description,Category,Type\n" +
+        "500,Test Import,Ping Pong Balls,Withdraw\n" +
+        "200,Second Test Import,Food,Deposit";
+
+      //console.log('Data successfully imported to Account:\nAccount Name: ' + this.importFile.value.accountname + ' Imported From File: ' + this.importFile.value.fileName)
 
       let lines = testdata.split("\n");
       let items = [""];
@@ -129,8 +132,8 @@ export class ImportPage {
       }
 
 
-    }
-    ).catch((err) => {console.log("File read error: " + JSON.stringify(err))});
+    //}
+    //).catch((err) => {console.log("File read error: " + JSON.stringify(err))});
     this.navCtrl.pop();
   }
 
