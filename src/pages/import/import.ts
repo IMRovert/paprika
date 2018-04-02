@@ -30,13 +30,14 @@ export class ImportPage {
   transaction: Transaction;
   accounts: Account[];
   accountid: number;
+  //inblob: Blob;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private file: File, public plat : Platform, private db: DatabaseProvider, private http : HTTP, private formBuilder: FormBuilder,  private alertCtrl: AlertController, private fch: FileChooser, private filePath: FilePath) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public plat : Platform, private db: DatabaseProvider, private http : HTTP, private formBuilder: FormBuilder,  private alertCtrl: AlertController, private fch: FileChooser, private filePath: FilePath) {
 
     this.importFile = this.formBuilder.group({
       //accountname: ['', Validators.required],
-      fileName: ['', Validators.required]
+      inBlob: ['', Validators.required]
     });
 
 
@@ -64,7 +65,13 @@ export class ImportPage {
 
   readFile() {
 
+    let fileread = new FileReader;
+
+    //this.file = document.getElementById("inputfile").files[0];
+
     let testdata;
+
+
     //let filechooserurl;
 
     //let datapath;
@@ -77,11 +84,15 @@ export class ImportPage {
     //this.file.readAsText(this.file.dataDirectory, "ImportFiles/" + this.importFile.value.fileName + ".csv").then((data) => {
 
       //console.log(data);
-      testdata = "Amount,Description,Category,Type\n" +
+      /*testdata = "Amount,Description,Category,Type\n" +
         "500,Test Import,Ping Pong Balls,Withdraw\n" +
-        "200,Second Test Import,Food,Deposit";
+        "200,Second Test Import,Food,Deposit"; */
 
-      //console.log('Data successfully imported to Account:\nAccount Name: ' + this.importFile.value.accountname + ' Imported From File: ' + this.importFile.value.fileName)
+
+      testdata = fileread.readAsText(this.importFile.value.inBlob);
+      alert("Data read from file: " + testdata);
+
+    //console.log('Data successfully imported to Account:\nAccount Name: ' + this.importFile.value.accountname + ' Imported From File: ' + this.importFile.value.fileName)
 
       let lines = testdata.split("\n");
       let items = [""];

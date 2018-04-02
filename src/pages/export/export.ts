@@ -74,6 +74,7 @@ export class ExportPage {
 
       //this.file.createFile(this.file.externalRootDirectory, this.exportFile.value.fileName, false).catch((err) => {console.log("Error creating filename: " + JSON.stringify(err))});
 
+      this.file.createDir(this.file.externalRootDirectory, "TestFolder", false).catch(err => {console.log("Error creating filename: " + JSON.stringify(err))});
       //this.file.writeExistingFile(this.file.externalRootDirectory, this.exportFile.value.fileName, testdata).catch(err => {console.log("Error writing to File: " + JSON.stringify(err))});
 
       this.navCtrl.pop();

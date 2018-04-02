@@ -23,11 +23,11 @@
       <ion-radio [value]="a.id"></ion-radio>
     </ion-item>
   </ion-list>
-  <form [formGroup]="importFile" (ngSubmit)="readFile()">
+  <form [formGroup]="importFile" (ngSubmit)="readFile()" enctype="multipart/form-data" method=""post>
     <ion-list>
       <ion-item>
         <ion-label>File Name</ion-label>
-        <ion-input id="inputfile" type="text" formControlName="fileName" required></ion-input>
+        <ion-input id="inputfile" type="file" formControlName="inBlob" required></ion-input>
       </ion-item>
       <ion-item>
         <button type="submit" color="dark" ion-button block large [disabled]="!importFile.valid">Import File</button>
