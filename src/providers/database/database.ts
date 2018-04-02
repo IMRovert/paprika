@@ -6,6 +6,7 @@ import {Category} from "../../models/category";
 import {SQLite, SQLiteObject} from "@ionic-native/sqlite";
 import {Platform} from "ionic-angular";
 import {Storage} from "@ionic/storage";
+import * as CryptoJS from 'crypto-js';
 
 /*
   Generated class for the SQLiteDatabaseProvider provider.
@@ -19,7 +20,7 @@ export abstract class DatabaseProvider {
 
   abstract encryptData(): Promise<any>;
 
-  abstract verifyCredentials(name: string, password: string): Promise<boolean>;
+  abstract verifyCredentials(email: string, password: string): Promise<boolean>;
 
   abstract createUser(user: User): Promise<boolean>;
 
@@ -45,7 +46,7 @@ export abstract class DatabaseProvider {
 
   abstract getBills(): Promise<any>;
 
-  abstract exportData(): Promise<any>;
+  abstract exportData(accountid: number): Promise<Transaction[]>;
 
   abstract importData(): Promise<any>;
 
@@ -63,7 +64,7 @@ export abstract class DatabaseProvider {
 export class SQLiteDatabaseProvider extends DatabaseProvider {
 
   getCategoryChartData(startDate: Date, endDate: Date): Promise<Array<{ name: string; amount: number }>> {
-    let sql = "SELECT SUM(amount) as total, name FROM transactions JOIN category ON transactions.category = category.code WHERE date <= ? and date >= ? GROUP BY name ;";
+    let sql = "SELECT SUM(amount) as total, name FROM transactions LEFT OUTER JOIN category ON transactions.category = category.code WHERE date <= ? and date >= ? GROUP BY name ;";
     return this.db.executeSql(sql, [endDate.getTime(), startDate.getTime()]).then(value => {
       let result = [];
       for (let i = 0; i < value.rows.length; i++) {
@@ -137,6 +138,8 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
 
   createUser(user: User): Promise<boolean> {
     return this.storage.ready().then(value => {
+      let hash = CryptoJS.SHA256(user.password).toString(CryptoJS.enc.Hex);
+      user.password = hash;
       return this.storage.set("user", user);
     })
   }
@@ -162,9 +165,13 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   verifyCredentials(email: string, password: string): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
-      resolve(false);
-    });
+    return this.getUser().then(value => {
+      if (value) {
+        let hash = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+        return email === value.email && value.password === hash;
+      }
+      return false;
+    })
   }
 
   getAccounts(): Promise<Account[]> {
@@ -245,8 +252,35 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
    * @returns {Promise<Transaction[]>}
    */
   getTransactionHistory(): Promise<Transaction[]> {
-    let sql = "SELECT t.id, amount, t.currency as currency, date, description, account, t.type as type, code, c.name as catName, a.name as acctName FROM transactions t JOIN category c ON t.category = c.code LEFT OUTER JOIN account a ON a.id = t.account ORDER BY date DESC;";
+    let sql = "SELECT t.id, amount, t.currency as currency, date, description, account, t.type as type, code, c.name as catName, a.name as acctName FROM transactions t LEFT OUTER JOIN category c ON t.category = c.code LEFT OUTER JOIN account a ON a.id = t.account ORDER BY date DESC;";
     return this.db.executeSql(sql, {})
+      .then(value => {
+        //console.log(JSON.stringify(value));
+        let t = [];
+        for (let i = 0; i < value.rows.length; i++) {
+          let item = value.rows.item(i);
+          //console.log(JSON.stringify(item));
+          let d = new Date();
+          d.setTime(item.date);
+          let trans = new Transaction(
+            item.id, item.amount, item.currency, d, item.description, item.account, item.catName, item.code, item.type
+          );
+          trans.accountName = item.acctName;
+          t.push(trans);
+        }
+        //console.log(JSON.stringify(t));
+        return t;
+      });
+  }
+
+  getBills(): Promise<any> {
+    return undefined;
+  }
+
+  exportData(accountid: number): Promise<Transaction[]> {
+
+    let sql = "SELECT t.id, amount, t.currency as currency, date, description, account, t.type as type, code, c.name as catName, a.name as acctName FROM transactions t LEFT OUTER JOIN category c ON t.category = c.code LEFT OUTER JOIN account a ON a.id = t.account WHERE t.account = ? ORDER BY date DESC;";
+    return this.db.executeSql(sql, [accountid])
       .then(value => {
         console.log(JSON.stringify(value));
         let t = [];
@@ -264,14 +298,6 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
         console.log(JSON.stringify(t));
         return t;
       });
-  }
-
-  getBills(): Promise<any> {
-    return undefined;
-  }
-
-  exportData(): Promise<any> {
-    return undefined;
   }
 
   importData(): Promise<any> {
