@@ -30,7 +30,8 @@ export class ImportPage {
   transaction: Transaction;
   accounts: Account[];
   accountid: number;
-  //inblob: Blob;
+  fileBlob: Blob;
+  filereader: FileReader;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public plat : Platform, private db: DatabaseProvider, private http : HTTP, private formBuilder: FormBuilder,  private alertCtrl: AlertController, private fch: FileChooser, private filePath: FilePath) {
@@ -63,9 +64,17 @@ export class ImportPage {
     return e1.id === e2.id;
   }
 
+  fileChosen(value) {
+
+    this.fileBlob = value;
+  }
   readFile() {
 
     let fileread = new FileReader;
+
+    fileread.onload =(e) => {
+      testdata = fileread.result;
+    }
 
     //this.file = document.getElementById("inputfile").files[0];
 
@@ -89,8 +98,10 @@ export class ImportPage {
         "200,Second Test Import,Food,Deposit"; */
 
 
-      testdata = fileread.readAsText(this.importFile.value.inBlob);
+      testdata = fileread.readAsText(this.fileBlob);
       alert("Data read from file: " + testdata);
+
+    alert("Second attempt: Data read from file: " + this.importFile.value.inBlob);
 
     //console.log('Data successfully imported to Account:\nAccount Name: ' + this.importFile.value.accountname + ' Imported From File: ' + this.importFile.value.fileName)
 
