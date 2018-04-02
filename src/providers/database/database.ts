@@ -6,6 +6,7 @@ import {Category} from "../../models/category";
 import {SQLite, SQLiteObject} from "@ionic-native/sqlite";
 import {Platform} from "ionic-angular";
 import {Storage} from "@ionic/storage";
+import * as CryptoJS from 'crypto-js';
 
 /*
   Generated class for the SQLiteDatabaseProvider provider.
@@ -19,7 +20,7 @@ export abstract class DatabaseProvider {
 
   abstract encryptData(): Promise<any>;
 
-  abstract verifyCredentials(name: string, password: string): Promise<boolean>;
+  abstract verifyCredentials(email: string, password: string): Promise<boolean>;
 
   abstract createUser(user: User): Promise<boolean>;
 
@@ -63,13 +64,14 @@ export abstract class DatabaseProvider {
 export class SQLiteDatabaseProvider extends DatabaseProvider {
 
   getCategoryChartData(startDate: Date, endDate: Date): Promise<Array<{ name: string; amount: number }>> {
-    let sql = "SELECT SUM(amount) as total, name FROM transactions JOIN category ON transactions.category = category.code WHERE date <= ? and date >= ? GROUP BY name ;";
+    let sql = "SELECT SUM(amount) as total, name FROM transactions LEFT OUTER JOIN category ON transactions.category = category.code WHERE date <= ? and date >= ? GROUP BY name ;";
     return this.db.executeSql(sql, [endDate.getTime(), startDate.getTime()]).then(value => {
       let result = [];
       for (let i = 0; i < value.rows.length; i++) {
         let item = value.rows.item(i);
         result.push({name: item.name, amount: item.total});
       }
+      console.log(JSON.stringify(result));
       return result;
     });
   }
@@ -136,6 +138,8 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
 
   createUser(user: User): Promise<boolean> {
     return this.storage.ready().then(value => {
+      let hash = CryptoJS.SHA256(user.password).toString(CryptoJS.enc.Hex);
+      user.password = hash;
       return this.storage.set("user", user);
     })
   }
@@ -161,9 +165,13 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   verifyCredentials(email: string, password: string): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
-      resolve(false);
-    });
+    return this.getUser().then(value => {
+      if (value) {
+        let hash = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+        return email === value.email && value.password === hash;
+      }
+      return false;
+    })
   }
 
   getAccounts(): Promise<Account[]> {

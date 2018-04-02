@@ -50,25 +50,22 @@ export class LoginPage implements OnInit {
   signIn() {
     console.log("test");
     // TODO: Real Login code to check credentials
-    this.db.getUser().then(value => {
-      console.log(JSON.stringify(value));
 
-      if (!value) {
-        this.errorMessage = "Invalid username or password";
-      }
+    this.db.verifyCredentials(this.login.get('email').value, this.login.get('password').value)
+      .then(value => {
+        if (value) {
+          this.errorMessage = "";
+          console.log("Valid Login");
+          console.log(this.navCtrl);
+          this.navigateToTransactionHistory();
+        } else {
+          this.errorMessage = "Invalid username or password";
 
-      if (this.login.controls["email"].value == value.email && this.login.controls["password"].value == value.password) {
-        this.errorMessage = "";
-        console.log("Valid Login");
-        console.log(this.navCtrl);
-        this.navigateToTransactionHistory();
-      } else {
-        this.errorMessage = "Invalid username or password";
-      }
-    });
-
-
-    console.log(this.login.value)
+        }
+      })
+      .catch(reason => {
+        console.log(JSON.stringify(reason));
+      });
   }
 
   navigateToTransactionHistory() {

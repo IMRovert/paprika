@@ -41,7 +41,11 @@ export class MyApp implements OnInit {
       this.nav.popToRoot();
       this.mainMenu.close();
     } else {
-      this.nav.push(page).catch(reason => console.log(reason));
+      this.nav.push(page).catch(reason => {
+        console.log(reason);
+        console.log(JSON.stringify(reason));
+
+      });
       this.mainMenu.close();
     }
   }

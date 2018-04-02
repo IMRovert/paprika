@@ -16,56 +16,62 @@
     <p>Account: {{transaction.accountName}}</p>
     <p>Amount: {{transaction.amount | currency}}</p>
   </div>
-  <div *ngIf="!edit">
-    <ion-label>Account</ion-label>
-    <ion-list radio-group [(ngModel)]="transaction.account">
-      <ion-item *ngFor="let a of accounts">
-        <ion-label>{{a.name}}</ion-label>
-        <ion-radio [value]="a.id"></ion-radio>
-      </ion-item>
-    </ion-list>
-
-    <ion-label>Transaction Type</ion-label>
-    <ion-list radio-group [(ngModel)]="withdraw">
-      <ion-item>
-        <ion-label>Deposit</ion-label>
-        <ion-radio value="0"></ion-radio>
-      </ion-item>
-      <ion-item>
-        <ion-label>Withdraw</ion-label>
-        <ion-radio value="1"></ion-radio>
-      </ion-item>
-    </ion-list>
+  <form [formGroup]="transactionForm" (ngSubmit)="save()">
+    <div *ngIf="!edit">
+      <ion-list>
+        <ion-item>
+          <ion-label>Account</ion-label>
+          <ion-select formControlName="account">
+            <ion-option *ngFor="let a of accounts" [value]="a.id">{{a.name}}</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+      <ion-list radio-group formControlName="type">
+        <ion-list-header>Transaction Type</ion-list-header>
+        <ion-item>
+          <ion-label>Deposit</ion-label>
+          <ion-radio value="0"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Withdraw</ion-label>
+          <ion-radio value="1"></ion-radio>
+        </ion-item>
+      </ion-list>
+    </div>
     <ion-list>
       <ion-item>
         <ion-label floating>Description</ion-label>
-        <ion-textarea [(ngModel)]="transaction.description"></ion-textarea>
+        <ion-textarea formControlName="description"></ion-textarea>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="!edit">
         <ion-label floating>Amount</ion-label>
-        <ion-input type="number" [(ngModel)]="amount"></ion-input>
+        <ion-input type="number" formControlName="amount"></ion-input>
       </ion-item>
     </ion-list>
-  </div>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label>Category</ion-label>
-          <ion-select [(ngModel)]="transaction.category" [compareWith]="compareCat">
-            <ion-option *ngFor="let cat of categories" [value]="cat">
-              {{cat.name}}
-            </ion-option>
-          </ion-select>
-        </ion-item>
-      </ion-col>
-      <ion-col col-auto>
-        <button style="float:right;" ion-button color="primary" (click)="addNewCategory()">
-          <ion-icon name="add">Add new</ion-icon>
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <button ion-button color="primary" block large (click)="save()" *ngIf="edit">Save Changes</button>
-  <button ion-button color="primary" block large (click)="save()" *ngIf="!edit">Add Transaction</button>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>Category</ion-label>
+            <ion-select formControlName="category" [compareWith]="compareCat">
+              <ion-option *ngFor="let cat of categories" [value]="cat">
+                {{cat.name}}
+              </ion-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col col-auto>
+          <button type="button" style="float:right;" ion-button color="primary" (click)="addNewCategory()">
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <button ion-button color="primary" [disabled]="!transactionForm.valid" type="submit" block large *ngIf="edit">Save
+      Changes
+    </button>
+    <button ion-button color="primary" [disabled]="!transactionForm.valid" type="submit" block large *ngIf="!edit">Add
+      Transaction
+    </button>
+  </form>
 </ion-content>

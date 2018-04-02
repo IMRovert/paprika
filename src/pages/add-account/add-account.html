@@ -14,19 +14,19 @@
 
 
 <ion-content padding>
-  <form (submit)="addAccount()">
+  <form [formGroup]="accForm" (ngSubmit)="addAccount()">
     <ion-list>
       <ion-item>
         <ion-label>Name</ion-label>
-        <ion-input type="text" name="name" [(ngModel)]="account.name"></ion-input>
+        <ion-input formControlName="name" type="text" name="name" [(ngModel)]="account.name"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Starting Balance</ion-label>
-        <ion-input type="number" name="balance" [(ngModel)]="account.balance"></ion-input>
+        <ion-input formControlName="balance" type="number" name="balance" [(ngModel)]="account.balance"></ion-input>
       </ion-item>
       <ion-list>
         <ion-item>
-          <ion-select [(ngModel)]="account.type" name="type">
+          <ion-select formControlName="type" [(ngModel)]="account.type" name="type">
             <ion-option>Checking</ion-option>
             <ion-option>Savings</ion-option>
             <ion-option>Credit Card</ion-option>
