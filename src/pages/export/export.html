@@ -1,5 +1,5 @@
 <!--
-  Generated template for the ExportPage page.
+  Generated template for the ImportPage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
@@ -7,15 +7,31 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Export</ion-title>
+    <ion-title>Export to File</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <div id="export-markdown10" class="show-list-numbers-and-dots">
-    <p>Will contain information needed to find the data that the user would like to export.</p>
+  <div id="import-markdown11" class="show-list-numbers-and-dots">
   </div>
-  <button ion-button large block color="primary">Export Data</button>
+  <ion-list radio-group [(ngModel)]="accountid">
+    <ion-item *ngFor="let a of accounts">
+      <ion-label>{{a.name}}</ion-label>
+      <ion-radio [value]="a.id"></ion-radio>
+    </ion-item>
+  </ion-list>
+  <form [formGroup]="exportFile" (ngSubmit)="readFile()">
+    <ion-list>
+      <ion-item>
+        <ion-label>File Name</ion-label>
+        <ion-input id="inputfile" type="text" formControlName="fileName" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <button type="submit" color="dark" ion-button block large [disabled]="!exportFile.valid">Export File</button>
+      </ion-item>
+    </ion-list>
+  </form>
+  <!--<button ion-button large block>IExport Data</button> -->
 </ion-content>

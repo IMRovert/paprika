@@ -46,7 +46,7 @@ export abstract class DatabaseProvider {
 
   abstract getBills(): Promise<any>;
 
-  abstract exportData(): Promise<any>;
+  abstract exportData(accountid: number): Promise<Transaction[]>;
 
   abstract importData(): Promise<any>;
 
@@ -255,6 +255,33 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
     let sql = "SELECT t.id, amount, t.currency as currency, date, description, account, t.type as type, code, c.name as catName, a.name as acctName FROM transactions t LEFT OUTER JOIN category c ON t.category = c.code LEFT OUTER JOIN account a ON a.id = t.account ORDER BY date DESC;";
     return this.db.executeSql(sql, {})
       .then(value => {
+        //console.log(JSON.stringify(value));
+        let t = [];
+        for (let i = 0; i < value.rows.length; i++) {
+          let item = value.rows.item(i);
+          //console.log(JSON.stringify(item));
+          let d = new Date();
+          d.setTime(item.date);
+          let trans = new Transaction(
+            item.id, item.amount, item.currency, d, item.description, item.account, item.catName, item.code, item.type
+          );
+          trans.accountName = item.acctName;
+          t.push(trans);
+        }
+        //console.log(JSON.stringify(t));
+        return t;
+      });
+  }
+
+  getBills(): Promise<any> {
+    return undefined;
+  }
+
+  exportData(accountid: number): Promise<Transaction[]> {
+
+    let sql = "SELECT t.id, amount, t.currency as currency, date, description, account, t.type as type, code, c.name as catName, a.name as acctName FROM transactions t LEFT OUTER JOIN category c ON t.category = c.code LEFT OUTER JOIN account a ON a.id = t.account WHERE t.account = ? ORDER BY date DESC;";
+    return this.db.executeSql(sql, [accountid])
+      .then(value => {
         console.log(JSON.stringify(value));
         let t = [];
         for (let i = 0; i < value.rows.length; i++) {
@@ -271,14 +298,6 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
         console.log(JSON.stringify(t));
         return t;
       });
-  }
-
-  getBills(): Promise<any> {
-    return undefined;
-  }
-
-  exportData(): Promise<any> {
-    return undefined;
   }
 
   importData(): Promise<any> {
