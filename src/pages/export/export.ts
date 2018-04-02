@@ -58,23 +58,26 @@ export class ExportPage {
     let testdata;
     //let filechooserurl;
 
-    this.db.exportData(this.accountid).then(transactions => {this.transList = transactions}).catch(err => {console.log("Error reading transactions from data base: " + JSON.stringify(err))});
-    testdata = "Amount,Description,Category,Type\n";
-    for(let i = 0; i < this.transList.length; i++) {
-      testdata = testdata + this.transList[i].amount + "," + this.transList[i].description + "," + this.transList[i].category.name + "," + this.transList[i].type + "\n";
+    this.db.exportData(this.accountid).then(transactions => {
 
-    }
+      this.transList = transactions
+      testdata = "Amount,Description,Category,Type\n";
+      for(let i = 0; i < this.transList.length; i++) {
+        testdata = testdata + this.transList[i].amount + "," + this.transList[i].description + "," + this.transList[i].category.name + "," + this.transList[i].type + "\n";
 
-    console.log("Transactions exported to File: \n" + testdata);
-    alert("Transactions exported: " + testdata);
+      }
 
-    //this.fch.open().then(uri => {this.filePath.resolveNativePath(uri).then(url => {filechooserurl = url}).catch((err) => {console.log("File uri error: " + err.toString())})}).catch((err) => {console.log("File native path error: " + err.toString())});
+      console.log("Transactions exported to File: \n" + testdata);
+      alert("Transactions exported: " + testdata);
 
-    //this.file.createFile(this.file.externalRootDirectory, this.exportFile.value.fileName, false).catch((err) => {console.log("Error creating filename: " + JSON.stringify(err))});
+      //this.fch.open().then(uri => {this.filePath.resolveNativePath(uri).then(url => {filechooserurl = url}).catch((err) => {console.log("File uri error: " + err.toString())})}).catch((err) => {console.log("File native path error: " + err.toString())});
 
-    //this.file.writeExistingFile(this.file.externalRootDirectory, this.exportFile.value.fileName, testdata).catch(err => {console.log("Error writing to File: " + JSON.stringify(err))});
+      //this.file.createFile(this.file.externalRootDirectory, this.exportFile.value.fileName, false).catch((err) => {console.log("Error creating filename: " + JSON.stringify(err))});
 
-    this.navCtrl.pop();
+      //this.file.writeExistingFile(this.file.externalRootDirectory, this.exportFile.value.fileName, testdata).catch(err => {console.log("Error writing to File: " + JSON.stringify(err))});
+
+      this.navCtrl.pop();
+    }).catch(err => {console.log("Error reading transactions from data base: " + JSON.stringify(err))});
   }
 
 }
