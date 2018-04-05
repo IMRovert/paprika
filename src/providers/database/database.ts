@@ -64,7 +64,7 @@ export abstract class DatabaseProvider {
 export class SQLiteDatabaseProvider extends DatabaseProvider {
 
   getCategoryChartData(startDate: Date, endDate: Date): Promise<Array<{ name: string; amount: number }>> {
-    let sql = "SELECT SUM(amount) as total, name FROM transactions LEFT OUTER JOIN category ON transactions.category = category.code WHERE date <= ? and date >= ? GROUP BY name ;";
+    let sql = "SELECT ABS(SUM(amount)) as total, name FROM transactions LEFT OUTER JOIN category ON transactions.category = category.code WHERE date <= ? and date >= ? AND amount < 0 GROUP BY name ;";
     return this.db.executeSql(sql, [endDate.getTime(), startDate.getTime()]).then(value => {
       let result = [];
       for (let i = 0; i < value.rows.length; i++) {
@@ -77,7 +77,7 @@ export class SQLiteDatabaseProvider extends DatabaseProvider {
   }
 
   getSpendingChartData(startDate: Date, endDate: Date): Promise<Array<{ date: Date; amount: number }>> {
-    let sql = "SELECT SUM(amount) as total, datetime(date/1000, 'unixepoch', 'start of day') as day FROM transactions WHERE date >= ? and date <= ? GROUP BY day;";
+    let sql = "SELECT ABS(SUM(amount)) as total, datetime(date/1000, 'unixepoch', 'start of day') as day FROM transactions WHERE date >= ? and date <= ? and amount < 0 GROUP BY day;";
     if (!startDate || !endDate || endDate.getTime() < startDate.getTime()) {
       console.log("Invalid graph dates");
       return new Promise<Array<{ date: Date, amount: number }>>(resolve => resolve([]));
