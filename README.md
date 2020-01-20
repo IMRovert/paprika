@@ -32,6 +32,8 @@ iii) Click the “Sign-up” button to confirm registration.
 
 iv) This will redirect to the home page Transaction History.
  If there is an invalid value given for any of the fields, an error message will appear stating the issue.
+ 
+ ![SplashScreen/Register](./Documentation/Login.JPG)
 		
  
 2. Login
@@ -41,6 +43,7 @@ i) Provide the appropriate login information in the text boxes and click “Logi
 ii) This will redirect to the home page, Transaction History.
 	 If there is an invalid value given for any of the fields, an error message will appear stating the issue.
 
+![Sign In](./Documentation/SignIn.JPG)
 
 
 3. Add account
@@ -51,7 +54,7 @@ ii) Enter the desired account name, initial balance, and account type.
 
 iii) Click “Add account.” The account will be created and added to the database.
 
-
+![Add Account](./Documentation/Account.JPG)
 
 4. Add Transaction:
 
@@ -68,6 +71,8 @@ v) Choose a category for the transaction (optional).
 
 vi) Click the “Add Transaction” button to add this transaction to the database.	
 
+![Add Transaction](./Documentation/Transaction.JPG)
+
 5. Edit Existing Transaction
 
 i) Starting from the main page listing transactions, click on the + symbol on a transaction to edit it. This will redirect to the edit transaction page.
@@ -76,8 +81,7 @@ iii) View instructions i - v for adding a transaction.
 
 iv) Click the “Save Changes” button to save changes to the transaction.
 
-	
-
+![HomeScreen](./Documentation/Home.JPG)
 	
 6. View graphical information:
 
@@ -89,7 +93,7 @@ iii) Transaction information for that time period will appear in graphs and char
 
 iv) Drag mouse over/or click charts to see more information.
 
-		
+![Graph/Date](./Documentation/GraphDate.JPG)
 
 7.  Import data
 
